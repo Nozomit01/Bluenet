@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Синяя сеть</string>
+    <string name="about">Неофициальный Android-клиент сетей Radmin VPN. Сетевой движок основан на OpenRad 1.5.0 (лицензия MIT). Приложение не связано с Famatech. Совместимость этого Android-порта с вашей сетью требует проверки.</string>
+</resources>

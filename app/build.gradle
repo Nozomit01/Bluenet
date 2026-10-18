@@ -1,0 +1,32 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'ru.bluenet.vpn'
+    compileSdk 35
+    testBuildType 'release'
+    defaultConfig {
+        applicationId 'ru.bluenet.vpn'
+        minSdk 26
+        targetSdk 35
+        versionCode 8
+        versionName '0.5.3'
+        testInstrumentationRunner 'ru.bluenet.vpn.RuntimeSmokeInstrumentation'
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    signingConfigs {
+        release {
+            def key = rootProject.file('.signing/release.jks')
+            def secret = rootProject.file('.signing/password.txt')
+            if (key.exists() && secret.exists()) {
+                storeFile key
+                storePassword secret.text.trim()
+                keyAlias 'bluenet'
+                keyPassword secret.text.trim()
+            }
+        }
+    }
+    buildFeatures { buildConfig true }
+    bundle { language { enableSplit = false } }
+    buildTypes { release { minifyEnabled false; signingConfig signingConfigs.release } }
+    packaging { jniLibs { useLegacyPackaging = true } }
+}
+dependencies { implementation files('libs/zxing-core-3.5.3.jar') }

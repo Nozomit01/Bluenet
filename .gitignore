@@ -1,0 +1,20 @@
+.gradle/
+build/
+app/build/
+native/target/
+.signing/
+local.properties
+dist/
+*.log
+
+# Local credentials and user data
+.env
+.env.*
+*.enc
+*.jks
+*.keystore
+*.p12
+profiles/
+captures/
+credentials/
+secrets/

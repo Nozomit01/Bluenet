@@ -1,0 +1,73 @@
+# Проверка безопасности 0.4.0
+
+Текущие изменения и ограничения — в разделе «Изменения 0.4.0» ниже. Предыдущие разделы сохраняют результаты аудита 0.3.0; утверждения об отсутствии подписок/kill switch и единственной launcher Activity относятся к той версии.
+
+Дата: 2026-10-14. Область: Android host, JNI, адаптер IP/Ethernet, используемые OpenRad crypto/protocol/session/runtime/UDP пути, зависимости и APK. Это инженерный аудит исходников с автоматическими проверками; не независимый pentest и не гарантия отсутствия всех уязвимостей.
+
+## Дополнения 0.3.0
+
+- VLESS-конфигурация принимается только как ограниченная share URI, не arbitrary Xray JSON. Password/UUID/SNI URI никогда не попадают в argv, JSON-файлы, журнал или экспорт диагностики; профиль зашифрован отдельным ключом Keystore. Java String/Go/Rust memory zeroization полностью не гарантируется.
+- Режим/маршруты фиксируются одним snapshot при создании TUN. Один физический TUN и две private datagram пары разделяют Radmin и VLESS; sourcefd ownership, SCM_RIGHTS и отмена проверены на Android. Отложенная ошибка старого mux не отключает новый.
+- Xray запускается app-owned process из Android native library directory, stdin-config, private Unix socket, случайные loopback SOCKS credentials. Сокет 0600 находится в app-private directory. Raw stdout/stderr не сохраняются: bounded decoder извлекает только фиксированную категорию ошибки VLESS, rate limit 1/10s. Ни строки, ни адреса из лога движка не экспортируются. GOMEMLIMIT 128 MiB — soft GC target, не hard-limit.
+- TLS certificate verification не отключается; unsafe URI rejected. `security=none` поддержан, не шифрует VLESS. Собственный kill switch/always-on не добавлены; закрытие TUN при сбое/переподключении не даёт гарантии блокировки всего трафика.
+- VLESS-набор ограничен TCP/raw, WS, gRPC, XHTTP/splithttp, TLS/Reality, UUID + encryption=none. Подписки, encrypted happ://, KCP, и новые VLESS encryption modes не импортируются. TLS/Reality/IPv6 и реальный сервер пользователя не проверены live.
+- Go 1.27.2, `go.mod`/`go.sum` и исходники upstream закреплены. anet использует linker flag `-checklinkname=0`, как требует библиотека начиная с Go 1.23. Проверено совпадение layout net.zoneCache с pinned SDK; при обновлении Go это требует повторной проверки. Не считать флаг отдельным тестом криптографии.
+- Govulncheck: нет call-reachable findings; есть module-only advisory GO-2026-5932 о deprecated `x/crypto/openpgp`. Пакет OpenPGP не импортирован/не связан с бинарником; зафиксировано отдельно, advisory не скрыт. Полный JSON в evidence/go-audit.json.
+- Error log: только allowlisted event categories/time, 128 entries, bounded async queue 64, protected storage. Export reads validated fields; raw errors/identifiers/secret links excluded. RTT signal reflects real authenticated timing, not RSSI.
+- Проверено 140 Rust unit + 17 network-management integration tests, локальный виртуальный IP → SOCKS → VLESS → TCP/UDP echo roundtrip, 14 Android instrumentation groups including ELF process start, fd transfer, mixed TUN, profile/import/log bounds, RU/EN resources, theme and real Activity rendering.
+
+## Исправленные находки
+
+| Находка | Оценка | Исправление и проверка |
+|---|---|---|
+| Gratuitous ARP обходит привязку sender IP/MAC к аутентифицированному peer | Средняя для общего forwarding helper; требуется доступ участника к сети. Android не устанавливает удалённый ARP-кэш из таких reply | Все ARP проверяют IP, Ethernet MAC и ARP MAC. Регрессия отвергает чужой VIP и подменённый MAC, принимает собственный gratuitous ARP |
+| Файл профиля читался целиком до ограничения размера | Низкая: локальный повреждённый/подменённый файл может вызвать расход памяти; доступ другого обычного приложения к private storage отсутствует | Потоковое чтение с лимитом 128 KiB до накопления полного файла. Проверка oversized и tampered profile; файл сохраняется для восстановления |
+| Новая попытка после неоднозначной регистрации могла создать другую идентичность | Надёжность/сохранение устройства | Durable marker коммитится непосредственно перед registering login. Предварительные DNS/auth ошибки не блокируют повтор. Успешное сохранение identity снимает marker; issued identity сохраняется в памяти для повторной записи |
+| Парольные окна допускают screenshot/autofill/saved state; длина ограничена 255 вместо 256 | Низкая; локальное раскрытие через UI/облачный autofill | FLAG_SECURE, отключение autofill и saved state, очищение EditText, лимит 256 и проверки управляющих символов |
+
+## Проверенные границы
+
+- Java-приложение использует Android framework без сторонних Maven runtime-зависимостей. AGP/Gradle/NDK — инструменты сборки; полного CVE-аудита их собственной цепочки зависимостей и Android OS в этом проходе нет. Gradle wrapper/AGP закреплены, wrapper проверяет SHA-256 дистрибутива.
+- RustSec: `cargo audit --json`, 75 пакетов Cargo.lock, известных уязвимостей 0, advisory warnings 0; база и commit записаны в evidence/dependency-audit.json. Это список известных проблем на дату проверки.
+- Rust Clippy с `-D warnings`; Rust format; протокольные/криптографические тесты upstream и регрессии Android. Короткий детерминированный corpus из 4096 malformed входов/усечений проверяет отсутствие panics в пакетных парсерах; это не непрерывный fuzzing с покрытием.
+- Ограничения кадров, queues, reassembly, offers и команд; отказ в forwarding неизвестному/подменённому IP/MAC; correlated authenticated RTT; проверка SH proofs и packet authentication с constant-time compare.
+- JNI отмена/поколения, единственный engine, ownership detached TUN fd и закрытие fd при отмене. Повторы не регистрируют устройство, не дублируют неоднозначные команды и ограничены пятью попытками.
+- AES-256-GCM/Android Keystore, новый IV при записи, атомарная запись, отвергание tampering без удаления профиля, backup/device transfer выключены. Network passwords не сохраняются. Identity неизбежно появляется в Java String/JNI и клонах Rust Identity во время обработки: JVM не гарантирует zeroization immutable String, а полное стирание всех копий credential/BigUint в памяти не обеспечено.
+- Единственный экспортируемый компонент приложения — launcher Activity; VPN service не экспортируется, защищён BIND_VPN_SERVICE; PendingIntent immutable. Release не debug/testOnly, подпись прежним ключом, три ABI, 16 KiB ELF и ZIP alignment.
+- Diagnostic JSON собирается по allowlist: исключены IP, RID, имена сетей/участников/устройства, payload, raw errors, пароли и ключи. Нет telemetry, analytics и автоматической отправки отчётов.
+
+## Ограничения и остаточные риски
+
+- Совместимость требует сохранения протокола Radmin/OpenRad. В нём имеются legacy SHA-1/MD4, custom channel authentication и RSA/SH схемы; не заменены на TLS/WireGuard. Проверки векторов и known-advisory scan не доказывают криптографическую стойкость протокола. BigUint operations не дают гарантии constant-time для всей криптографии.
+- Члены одной сети могут обращаться к приложениям телефона, слушающим на его VIP; отдельного inbound firewall/изоляции игр нет. Разрешайте вход только доверенным участникам сети.
+- Это split tunnel, не VPN для защиты всего интернет-трафика. Собственного kill switch нет; во время смены сети/повторов TUN может отсутствовать. Always-on/lockdown явно не поддерживаются.
+- Отзыв разрешения, ручное отключение и прекращение службы системой не запускают скрытые повторы; после исчерпания лимита нужно подключиться вручную. Нерешённая registration ambiguity не удаляет профиль и не регистрирует молча заново.
+- Нет root-device, forensic-memory, hardware Keystore, battery-vendor, Android 8/ARM device и длительных нагрузочных проверок. Packet corpus не заменяет покрывающий fuzzing или внешний security review.
+- Пользователь предоставил проверку версии 0.1.0: Windows Radmin + Android + Minecraft, DirectTcp и Relay. Для 0.3.0 новая реальная сеть/смена Wi-Fi и мобильного интернета автоматически не тестировались; emulator использует только loopback synthetic identity.
+
+Окончательные результаты исполнения: `dist/verification-0.3.0.json`, логи: `dist/release-0.3.0/evidence/`.
+
+
+## Изменения 0.4.0
+
+Подписки принимаются только по HTTPS с проверкой сертификатов, без userinfo/fragment. Не более четырёх HTTP-запросов при редиректах, 256 KiB на ответ, 24 поддерживаемых записи, 56 KiB на записи каталога, URL 4096 символов. Plain/Base64 поддержаны; JSON/YAML, Happ-шифрование подписок и остальные протоколы не импортируются. При ошибке сохраняется прежний каталог. URL/URI хранятся под AES-GCM/Android Keystore, raw errors не журналируются. Фоновые обновления проверяют исходную подписку под общей блокировкой, чтобы не восстановить удалённый/заменённый каталог.
+
+App routing требует API 29 getConnectionOwnerUid. Radmin всегда обрабатывается первым; DNS, фрагменты, неизвестные UID/заголовки используют VLESS. Прямые решения не кешируются: один сетевой tuple может быть занят другим UID. Общий UID означает общий выбор. Показываются приложения с launcher activity; пакет самого движка исключён из TUN как ранее. DNS централизован через VLESS, это не DNS конкретного приложения. За пределами 26/8 невыбранные приложения идут через отдельный локальный freedom/tun2socks process; выбранным нет автоматического direct fallback.
+
+Kill switch удерживает duplicate TUN, а перед подключением создаёт блокирующий TUN. Он действует только при запущенной службе в объединённом режиме. При смене TUN Android переключает интерфейс, старый descriptor закрывается после получения нового. Явный Stop, revoke, force-stop/crash/уничтожение службы снимают защиту. Не заявляется системный Always-on/lockdown. При блокировке могут временно остановиться также интернет невыбранных приложений и Radmin; это цена отказа без утечки.
+
+Проверка VLESS проходит через локальный SOCKS с уникальным паролем и туннель до www.gstatic.com:443 с обязательной проверкой TLS и HTTP 204; это длительность установки пути, не ICMP RTT. Доступность контрольного URL может зависеть от региона. Три последовательных отказа раз в 30 секунд запускают смену сервера; старый результат помечается отказавшим. Выбирается свежий успешный замер до 10 минут, иначе следующий сервер. Переподключение сохраняет общий бюджет пяти попыток.
+
+TCP-проверка игр использует SYN внутри аутентифицированного Radmin-канала, случайные sequence/local port, сверяет IP/порты/ACK/checksums; таймаут три секунды, максимум восемь одновременных проверок, сбрасывает успешно открытый half-connection RST. Разрешены только числовые IPv4 26/8. Это не проверка UDP/Bedrock, списка миров или логина Minecraft.
+
+QR-приглашение bluenet://join хранит имя/пароль в URI fragment. Экран защищён FLAG_SECURE, секретные поля не сохраняются в instance state/autofill. Пароль не сохраняется в списках; clipboard помечается sensitive на API 33+. Внешние приглашения требуют явного подтверждения пользователя перед join. QR с паролем нужно передавать только приглашённому человеку; системная камера может обрабатывать его согласно своим правилам.
+
+Зависимость QR: ZXing core 3.5.3, Apache-2.0, закреплённый локальный JAR, полный LICENSE и corresponding sources приложены. Нативные OpenRad/Xray/tun2socks не изменялись относительно 0.3.0; их предыдущие тесты не выданы за повторный прогон. Результаты проверки 0.4.0 публикуются в отдельном verification.json. Полную проверку всех возможных уязвимостей гарантировать нельзя.
+
+ZXing 3.5.3 проверен по OSV Maven 2026-10-14: ответ без известных advisories, evidence/zxing-osv.json. Это не доказательство отсутствия неизвестных ошибок. В 0.4.0 дополнительно экспортируются TileService и JobService, оба защищены соответствующими системными BIND-пермиссиями; tools Activity закрыта для внешнего вызова.
+
+Первый тест app routing использовал UID самого движка и вернул INVALID_UID: Android getConnectionOwnerUid раскрывает владельца только для UID, к которым применяется данный VPN. Движок исключён из TUN, поэтому такой тест некорректен. Исправленный тестовый APK содержит отдельную loopback UDP-службу с другим UID, входящим в VPN. Release APK не содержит эту службу. Исходный failure сохранён для прозрачности в android-runtime-first-fixture-failure.log. Общий таймаут подписки 45 секунд, проверки VLESS 20 секунд защищает от медленно поступающих ответов.
+
+Учтена смена назначения UID: перед прямой отправкой сверяются актуальные пакеты UID с сохранённым выбором, чтобы переустановка выбранного приложения не открыла ему прямой маршрут. Также добавлено ограниченное ожидание listen() локального IPC: наличие файла сокета само по себе не означает готовность сервера. Отключённый LAN discovery больше не отправляет multicast/broadcast в Radmin при широком маршруте объединённого режима.
+
+Финальный прогон 0.4.0: все 21 группы Android API 35 x86-64 прошли. Тестовый UDP-сокет перенесён на Binder worker вместо main thread; TCP-тест обращается к mux своего синтетического Service, а не к framework singleton. При прямом маршруте проверяется реальный UID; неизвестные владельцы и DNS 53/853 остаются через VLESS. Сопоставление APK с установленным файлом, подпись и 16 KiB ZIP alignment выполнены отдельно. Реальные серверы пользователя и ARM-устройства не тестировались.

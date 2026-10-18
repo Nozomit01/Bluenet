@@ -1,0 +1,121 @@
+/workspace/blue-network-android/app/src/main/java/ru/bluenet/vpn/BlueVpnService.java:216: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+    public void saveIdentity(String value) throws Exception { identity.write(value); getSharedPreferences("registration", MODE_PRIVATE).edit().putBoolean("pending", false).commit(); }
+                                                                                                                                                                            ~~~~~~~~
+
+   Explanation for issues of type "ApplySharedPref":
+   Consider using apply() instead of commit on shared preferences. Whereas
+   commit blocks and writes its data to persistent storage immediately, apply
+   will handle it in the background.
+
+/workspace/blue-network-android/gradle/wrapper/gradle-wrapper.properties:3: Warning: A newer version of Gradle than 8.11.1 is available: 8.14.6 [AndroidGradlePluginVersion]
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.11.1-bin.zip
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "AndroidGradlePluginVersion":
+   This detector looks for usage of the Android Gradle Plugin where the
+   version you are using is not the current stable release. Using older
+   versions is fine, and there are cases where you deliberately want to stick
+   with an older version. However, you may simply not be aware that a more
+   recent version is available, and that is what this lint check helps find.
+
+/workspace/blue-network-android/app/src/main/res/values/features.xml:21: Warning: The resource R.string.vless_import appears to be unused [UnusedResources]
+    <string name="vless_import">"Импортировать VLESS"</string>
+            ~~~~~~~~~~~~~~~~~~~
+/workspace/blue-network-android/app/src/main/res/values/features.xml:23: Warning: The resource R.string.vless_profile_ok appears to be unused [UnusedResources]
+    <string name="vless_profile_ok">"Профиль импортирован и зашифрован"</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/blue-network-android/app/src/main/res/values/features.xml:25: Warning: The resource R.string.vless_paste appears to be unused [UnusedResources]
+    <string name="vless_paste">"Вставьте ссылку vless:// из Happ. Ссылка — секрет: не добавляйте её в журнал."</string>
+            ~~~~~~~~~~~~~~~~~~
+/workspace/blue-network-android/app/src/main/res/values/features.xml:26: Warning: The resource R.string.vless_removed appears to be unused [UnusedResources]
+    <string name="vless_removed">"VLESS-профиль удалён"</string>
+            ~~~~~~~~~~~~~~~~~~~~
+/workspace/blue-network-android/app/src/main/res/values/features.xml:28: Warning: The resource R.string.create_hint appears to be unused [UnusedResources]
+    <string name="create_hint">"Создайте сеть здесь и подключите к ней другие телефоны или ПК по имени и паролю. ПК для создания не нужен."</string>
+            ~~~~~~~~~~~~~~~~~~
+/workspace/blue-network-android/app/src/main/res/values/features.xml:37: Warning: The resource R.string.error_protocol appears to be unused [UnusedResources]
+    <string name="error_protocol">"Ошибка сетевого протокола"</string>
+            ~~~~~~~~~~~~~~~~~~~~~
+/workspace/blue-network-android/app/src/main/res/values/ui.xml:8: Warning: The resource R.string.ui_6 appears to be unused [UnusedResources]
+    <string name="ui_6" formatted="false">"Одна сеть. Ближе друг к другу."</string>
+            ~~~~~~~~~~~
+
+   Explanation for issues of type "UnusedResources":
+   Unused resources make applications larger and slow down builds.
+
+
+   The unused resource check can ignore tests. If you want to include
+   resources that are only referenced from tests, consider packaging them in a
+   test source set instead.
+
+   You can include test sources in the unused resource check by setting the
+   system property lint.unused-resources.include-tests =true, and to exclude
+   them (usually for performance reasons), use
+   lint.unused-resources.exclude-tests =true.
+   ,
+
+   Available options:
+
+   **skip-libraries** (default is true):
+   Whether the unused resource check should skip reporting unused resources in libraries.
+
+   Many libraries will declare resources that are part of the library surface; other modules depending on the library will also reference the resources. To avoid reporting all these resources as unused (in the context of a library), the unused resource check normally skips reporting unused resources in libraries. Instead, run the unused resource check on the consuming app module (along with `checkDependencies=true`).
+
+   However, there are cases where you want to check that all the resources declared in a library are used; in that case, you can disable the skip option.
+
+   To configure this option, use a `lint.xml` file with an <option> like this:
+
+   ```xml
+   <lint>
+       <issue id="UnusedResources">
+           <option name="skip-libraries" value="true" />
+       </issue>
+   </lint>
+   ```
+
+/workspace/blue-network-android/app/src/main/java/ru/bluenet/vpn/SignalView.java:5: Warning: Custom view SignalView is missing constructor used by tools: (Context) or (Context,AttributeSet) or (Context,AttributeSet,int) [ViewConstructor]
+final class SignalView extends View {
+            ~~~~~~~~~~
+
+   Explanation for issues of type "ViewConstructor":
+   Some layout tools (such as the Android layout editor) need to find a
+   constructor with one of the following signatures:
+   * View(Context context)
+   * View(Context context, AttributeSet attrs)
+   * View(Context context, AttributeSet attrs, int defStyle)
+
+   If your custom view needs to perform initialization which does not apply
+   when used in a layout editor, you can surround the given code with a check
+   to see if View#isInEditMode() is false, since that method will return false
+   at runtime but true within a user interface editor.
+
+/workspace/blue-network-android/app/src/main/java/ru/bluenet/vpn/FeatureActivity.java:56: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            if(entries.length()>0)button(t("Проверить все серверы","Test all servers"),()->{if(stopped())work(()->{JSONArray list=ServerCatalog.read(this).getJSONArray("servers");for(int i=0;i<list.length()&&!Thread.currentThread().isInterrupted();i++){JSONObject s=list.getJSONObject(i);long ms;try{ms=ProxyEngine.test(this,s.getString("link"));}catch(Exception e){ms=-1;}ServerCatalog.result(this,s.getString("id"),ms);int count=i+1;main.post(()->{if(!isFinishing()&&!isDestroyed())progressLabel.setText(t("Проверено: ","Tested: ")+count+"/"+list.length());});}});});
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/blue-network-android/app/src/main/java/ru/bluenet/vpn/FeatureActivity.java:83: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            CheckBox check=new CheckBox(this);check.setText(info.loadLabel(getPackageManager())+"\n"+name);check.setTextColor(ink);check.setChecked(selected.contains(name));content.addView(check);
+                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/blue-network-android/app/src/main/java/ru/bluenet/vpn/FeatureActivity.java:99: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+    private void portDialog(String ip){EditText field=input(t("Порт","Port"),false);field.setInputType(InputType.TYPE_CLASS_NUMBER);field.setText("25565");
+                                                                                                                                                  ~~~~~~~
+/workspace/blue-network-android/app/src/main/java/ru/bluenet/vpn/MainActivity.java:122: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            String vip=snapshot.optString("vip","");boolean hasIp=!vip.isEmpty()&&!vip.equals("null");ipLabel.setText(tr(R.string.ui_31)+(hasIp?vip:"—"));ipLabel.setVisibility(hasIp?View.VISIBLE:View.GONE);
+                                                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/blue-network-android/app/src/main/java/ru/bluenet/vpn/MainActivity.java:124: Warning: Number formatting does not take into account locale settings. Consider using String.format instead. [SetTextI18n]
+            JSONObject peers=snapshot.optJSONObject("peers");int online=0;if(peers!=null){Iterator<String> keys=peers.keys();while(keys.hasNext()){JSONObject p=peers.optJSONObject(keys.next());if(p!=null&&p.optString("status").equals("Connected"))online++;}}count.setText(Integer.toString(online));
+                                                                                                                                                                                                                                                                                ~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "SetTextI18n":
+   When calling TextView#setText
+   * Never call Number#toString() to format numbers; it will not handle
+   fraction separators and locale-specific digits properly. Consider using
+   String#format with proper format specifications (%d or %f) instead.
+   * Do not pass a string literal (e.g. "Hello") to display text. Hardcoded
+   text can not be properly translated to other languages. Consider using
+   Android resource strings instead.
+   * Do not build messages by concatenating text chunks. Such messages can not
+   be properly translated.
+
+   https://developer.android.com/guide/topics/resources/localization.html
+
+0 errors, 15 warnings

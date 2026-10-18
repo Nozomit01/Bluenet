@@ -1,0 +1,5 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Only the disposable test APK contains this socket fixture; never the release APK. -->
+    <application><service android:name="ru.bluenet.vpn.FlowOwnerFixtureService" android:exported="true"/></application>
+</manifest>

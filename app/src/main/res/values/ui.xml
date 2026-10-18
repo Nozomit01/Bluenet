@@ -1,0 +1,132 @@
+<resources>
+    <string name="ui_0" formatted="false">"Значок сети"</string>
+    <string name="ui_1" formatted="false">"СИНЯЯ СЕТЬ"</string>
+    <string name="ui_2" formatted="false">"Radmin VPN на вашем Android"</string>
+    <string name="ui_3" formatted="false">"О приложении"</string>
+    <string name="ui_4" formatted="false">"Ваши устройства"</string>
+    <string name="ui_5" formatted="false">"Настройки"</string>
+    <string name="ui_6" formatted="false">"Одна сеть. Ближе друг к другу."</string>
+    <string name="ui_7" formatted="false">"Прямое подключение к сетям Radmin VPN"</string>
+    <string name="ui_8" formatted="false">"ВАШИ СЕТИ"</string>
+    <string name="ui_9" formatted="false">"Сети"</string>
+    <string name="ui_10" formatted="false">"Устройства"</string>
+    <string name="ui_11" formatted="false">"Состояние VPN"</string>
+    <string name="ui_12" formatted="false">"VPN отключён"</string>
+    <string name="ui_13" formatted="false">"Подключите VPN и выберите свою сеть"</string>
+    <string name="ui_14" formatted="false">"Ваш адрес  ·  —"</string>
+    <string name="ui_15" formatted="false">"Подключиться"</string>
+    <string name="ui_16" formatted="false">"ПОЛУЧЕНО"</string>
+    <string name="ui_17" formatted="false">"ОТПРАВЛЕНО"</string>
+    <string name="ui_18" formatted="false">"УСТРОЙСТВ"</string>
+    <string name="ui_19" formatted="false">"0 Б"</string>
+    <string name="ui_20" formatted="false">"VPN подключён"</string>
+    <string name="ui_21" formatted="false">"Подключение…"</string>
+    <string name="ui_22" formatted="false">"Отключение…"</string>
+    <string name="ui_23" formatted="false">"Не удалось подключиться"</string>
+    <string name="ui_24" formatted="false">"Добавьте сеть для связи с устройствами"</string>
+    <string name="ui_25" formatted="false">"Сетей подключено: "</string>
+    <string name="ui_26" formatted="false">"Ожидание повторного подключения"</string>
+    <string name="ui_27" formatted="false">"Подключение к серверу"</string>
+    <string name="ui_28" formatted="false">"Прямой клиент сетей Radmin VPN"</string>
+    <string name="ui_29" formatted="false">"Отключить VPN"</string>
+    <string name="ui_30" formatted="false">"Отменить подключение"</string>
+    <string name="ui_31" formatted="false">"Ваш адрес  ·  "</string>
+    <string name="ui_32" formatted="false">"Сервер не подтвердил результат. Подключитесь заново, чтобы обновить список сетей."</string>
+    <string name="ui_33" formatted="false">"Не удалось выполнить действие"</string>
+    <string name="ui_34" formatted="false">"Понятно"</string>
+    <string name="ui_35" formatted="false">"Время ответа: "</string>
+    <string name="ui_36" formatted="false">"%.1f мс"</string>
+    <string name="ui_37" formatted="false">"Устройство не ответило. Проверьте соединение."</string>
+    <string name="ui_38" formatted="false">"Ошибка запуска"</string>
+    <string name="ui_39" formatted="false">"Не удалось загрузить сетевой движок"</string>
+    <string name="ui_40" formatted="false">"ПАРАМЕТРЫ ПОДКЛЮЧЕНИЯ"</string>
+    <string name="ui_41" formatted="false">"УСТРОЙСТВА В ВАШИХ СЕТЯХ"</string>
+    <string name="ui_42" formatted="false">"УСТРОЙСТВА ВЫБРАННОЙ СЕТИ"</string>
+    <string name="ui_43" formatted="false">"Сетей пока нет"</string>
+    <string name="ui_44" formatted="false">"Введите имя и пароль сети,\nкоторую используете в Radmin VPN"</string>
+    <string name="ui_45" formatted="false">"Присоединиться к сети"</string>
+    <string name="ui_46" formatted="false">"Создать сеть"</string>
+    <string name="ui_47" formatted="false">"Обычный интернет остаётся напрямую.\nЧерез VPN идут подключения к участникам сети."</string>
+    <string name="ui_48" formatted="false">"Участников: "</string>
+    <string name="ui_49" formatted="false">"Действия с сетью "</string>
+    <string name="ui_50" formatted="false">"Показать устройства"</string>
+    <string name="ui_51" formatted="false">"Выйти из сети"</string>
+    <string name="ui_52" formatted="false">"Выйти из сети?"</string>
+    <string name="ui_53" formatted="false">"Отмена"</string>
+    <string name="ui_54" formatted="false">"Выйти"</string>
+    <string name="ui_55" formatted="false">"Пока нет устройств"</string>
+    <string name="ui_56" formatted="false">"После присоединения к сети здесь появятся её участники и их VPN-адреса."</string>
+    <string name="ui_57" formatted="false">"Показаны первые 200 устройств"</string>
+    <string name="ui_58" formatted="false">"Устройство"</string>
+    <string name="ui_59" formatted="false">"Закрыть"</string>
+    <string name="ui_60" formatted="false">"Скопировать IP"</string>
+    <string name="ui_61" formatted="false">"Проверить связь"</string>
+    <string name="ui_62" formatted="false">"Имя сети"</string>
+    <string name="ui_63" formatted="false">"Как в Radmin VPN"</string>
+    <string name="ui_64" formatted="false">"Пароль"</string>
+    <string name="ui_65" formatted="false">"Пароль сети"</string>
+    <string name="ui_66" formatted="false">"Открытая сеть, без пароля"</string>
+    <string name="ui_67" formatted="false">"Пароль не сохраняется на устройстве"</string>
+    <string name="ui_68" formatted="false">"Создать"</string>
+    <string name="ui_69" formatted="false">"Присоединиться"</string>
+    <string name="ui_70" formatted="false">"Введите имя сети без управляющих символов"</string>
+    <string name="ui_71" formatted="false">"Пароль: 6–256 символов, без управляющих символов"</string>
+    <string name="ui_72" formatted="false">"Запрос на создание сети отправлен"</string>
+    <string name="ui_73" formatted="false">"Запрос на присоединение отправлен"</string>
+    <string name="ui_74" formatted="false">"Разрешение VPN не выдано"</string>
+    <string name="ui_75" formatted="false">"Диагностика сохранена без адресов, имён и секретов"</string>
+    <string name="ui_76" formatted="false">"Не удалось сохранить диагностику"</string>
+    <string name="ui_77" formatted="false">"Не удалось запустить VPN. Откройте приложение и попробуйте снова."</string>
+    <string name="ui_78" formatted="false">"Имя устройства"</string>
+    <string name="ui_79" formatted="false">"Так вас увидят другие участники сети"</string>
+    <string name="ui_80" formatted="false">"Сохранить"</string>
+    <string name="ui_81" formatted="false">"Введите имя без управляющих символов"</string>
+    <string name="ui_82" formatted="false">"Имя применится при следующем подключении"</string>
+    <string name="ui_83" formatted="false">"Поиск для LAN-игр"</string>
+    <string name="ui_84" formatted="false">"Передавать широковещательные запросы между участниками"</string>
+    <string name="ui_85" formatted="false">"Только через ретранслятор"</string>
+    <string name="ui_86" formatted="false">"Помогает, если прямые соединения блокируются сетью"</string>
+    <string name="ui_87" formatted="false">"Автопереподключение"</string>
+    <string name="ui_88" formatted="false">"После смены Wi-Fi или обрыва связи: до пяти попыток"</string>
+    <string name="ui_89" formatted="false">"Изменения применятся при следующем подключении"</string>
+    <string name="ui_90" formatted="false">"Сохранить диагностику"</string>
+    <string name="ui_91" formatted="false">"Только версия, состояние, счётчики и типы соединений. Без IP, имён сетей, паролей и ключей."</string>
+    <string name="ui_92" formatted="false">"Синяя сеть · "</string>
+    <string name="ui_93" formatted="false">"Неофициальный клиент сетей Radmin VPN\nAndroid 8.0 и новее"</string>
+    <string name="ui_94" formatted="false">"Не удалось подготовить диагностику"</string>
+    <string name="ui_95" formatted="false">"Синяя сеть"</string>
+    <string name="ui_96" formatted="false">"\n\nВерсия "</string>
+    <string name="ui_97" formatted="false">" · Android 8.0+\n\nПароли сетей не сохраняются. Профиль устройства защищён Android Keystore."</string>
+    <string name="ui_98" formatted="false">"Лицензии"</string>
+    <string name="ui_99" formatted="false">"Лицензии приложения"</string>
+    <string name="ui_100" formatted="false">"Лицензия MIT"</string>
+    <string name="ui_101" formatted="false">"VPN-адрес"</string>
+    <string name="ui_102" formatted="false">"IP-адрес скопирован"</string>
+    <string name="ui_103" formatted="false">" Б"</string>
+    <string name="ui_104" formatted="false">"%.1f КБ"</string>
+    <string name="ui_105" formatted="false">"%.1f МБ"</string>
+    <string name="ui_106" formatted="false">"%.1f ГБ"</string>
+    <string name="ui_107" formatted="false">"Подключён"</string>
+    <string name="ui_108" formatted="false">"Соединение…"</string>
+    <string name="ui_109" formatted="false">"В сети"</string>
+    <string name="ui_110" formatted="false">"Соединение отклонено"</string>
+    <string name="ui_111" formatted="false">"Нет соединения"</string>
+    <string name="ui_112" formatted="false">"Недоступен"</string>
+    <string name="ui_113" formatted="false">"Не в сети"</string>
+    <string name="ui_114" formatted="false">"Напрямую · TCP"</string>
+    <string name="ui_115" formatted="false">"Напрямую · UDP"</string>
+    <string name="ui_116" formatted="false">"Ретранслятор"</string>
+    <string name="ui_117" formatted="false">"Вы присоединились к сети "</string>
+    <string name="ui_118" formatted="false">"Создана сеть "</string>
+    <string name="ui_119" formatted="false">"Вы вышли из сети"</string>
+    <string name="ui_120" formatted="false">"Запрос отправлен. Ожидается одобрение администратора сети."</string>
+    <string name="ui_121" formatted="false">"Действие выполнено"</string>
+    <string name="ui_122" formatted="false">"Проверьте интернет и повторите подключение"</string>
+    <string name="ui_128" formatted="false">"Проверьте имя сети и её пароль"</string>
+    <string name="ui_130" formatted="false">"Разрешите приложению создавать VPN-подключение"</string>
+    <string name="ui_131" formatted="false">"Подождите завершения предыдущего действия"</string>
+    <string name="ui_132" formatted="false">"Сервер не отвечает. Проверьте интернет и попробуйте снова"</string>
+    <string name="ui_133" formatted="false">"Сервер отклонил запрос. Проверьте имя сети и права доступа"</string>
+    <string name="ui_134" formatted="false">"Проверьте имя сети: от 1 до 255 символов"</string>
+    <string name="ui_135" formatted="false">"Не удалось подключиться. Проверьте интернет и повторите попытку"</string>
+</resources>

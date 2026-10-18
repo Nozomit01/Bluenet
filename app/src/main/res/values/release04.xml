@@ -1,0 +1,16 @@
+<resources>
+    <string name="server_tools">"Подписки и серверы VLESS"</string>
+    <string name="apps_vless">"Приложения через VLESS"</string>
+    <string name="games_tools">"Игры и избранные устройства"</string>
+    <string name="invitation_title">"Приглашение в сеть · QR"</string>
+    <string name="invitation_connect">"Подключить VPN, чтобы принять приглашение? Затем вы подтвердите вступление в сеть."</string>
+    <string name="invitation_invalid">"Неверное приглашение"</string>
+    <string name="kill_switch">"Блокировать трафик при обрыве VLESS"</string>
+    <string name="kill_switch_hint">"В объединённом режиме трафик блокируется при сбое и переподключении. Работает пока VPN-служба запущена; ручное отключение или остановка Android снимают защиту."</string>
+    <string name="traffic_blocked">"Трафик заблокирован"</string>
+    <string name="tile_hint">"В шторке Android нажмите «Изменить» и добавьте плитку «Синяя сеть» для быстрого подключения."</string>
+    <string name="subscription_failed">"Не удалось обновить подписку; прежние серверы сохранены"</string>
+    <string name="server_switched">"Выбран резервный VLESS-сервер"</string>
+    <string name="tool_failed">"Не удалось выполнить проверку или импорт"</string>
+    <string name="invitation_wait">"Приглашение принято для подтверждения после подключения VPN."</string>
+</resources>

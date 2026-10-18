@@ -1,0 +1,33 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <queries><intent><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent></queries>
+    <application android:label="@string/app_name" android:theme="@style/AppTheme"
+        android:icon="@drawable/ic_launcher" android:roundIcon="@drawable/ic_launcher"
+        android:extractNativeLibs="true" android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules" tools:targetApi="31" android:usesCleartextTraffic="false" android:supportsRtl="false">
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
+            <intent-filter><action android:name="android.intent.action.VIEW"/><category android:name="android.intent.category.DEFAULT"/><category android:name="android.intent.category.BROWSABLE"/><data android:scheme="bluenet" android:host="join"/></intent-filter>
+        </activity>
+        <activity android:name=".QuickConnectActivity" android:exported="false"/>
+        <activity android:name=".ReleaseNotesActivity" android:exported="false"/>
+        <activity android:name=".ChatActivity" android:exported="false"/>
+        <service android:name=".QuickBubbleService" android:exported="false" android:foregroundServiceType="specialUse"><property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="User-enabled floating VPN controls and private network chat over games"/></service>
+        <activity android:name=".FeatureActivity" android:exported="false"/>
+        <service android:name=".SubscriptionJob" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="true"/>
+        <service android:name=".VpnTile" android:label="@string/app_name" android:icon="@drawable/ic_notification" android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE"/></intent-filter>
+        </service>
+        <service android:name=".BlueVpnService" android:exported="false"
+            android:permission="android.permission.BIND_VPN_SERVICE" android:foregroundServiceType="specialUse">
+            <intent-filter><action android:name="android.net.VpnService" /></intent-filter>
+            <meta-data android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON" android:value="false" />
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="User-requested VPN connection to Radmin VPN networks" />
+        </service>
+    </application>
+</manifest>

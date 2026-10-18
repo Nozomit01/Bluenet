@@ -1,0 +1,23 @@
+{
+  "version": "0.5.3",
+  "version_code": 8,
+  "date_utc": "2026-10-18",
+  "scope": "Editorial release notes, documentation, license source notice; no networking changes",
+  "apk_sha256": "82fc6436c1fd09696bcddca819b218db72618944c3bd35c93aa8ae40eb7e3bad",
+  "build": "pass",
+  "lint_summary": "0 errors, 15 warnings",
+  "signature": "same certificate as0.5.2",
+  "zipalign_16k": "pass",
+  "release_notes": "Eight versions RU/EN, canonical JSON matches APK and generated Markdown",
+  "native_libraries": "six byte-identical to0.5.2",
+  "android_runtime": {
+    "current_version": "not rerun for editorial-only changes",
+    "prior_tested_version": "0.5.2",
+    "prior_groups_passed": 28
+  },
+  "not_tested": [
+    "physical Android devices",
+    "real Radmin and VLESS servers",
+    "current0.5.3 full instrumentation runtime"
+  ]
+}

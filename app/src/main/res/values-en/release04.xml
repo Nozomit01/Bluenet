@@ -1,0 +1,16 @@
+<resources>
+    <string name="server_tools">"VLESS subscriptions and servers"</string>
+    <string name="apps_vless">"Apps using VLESS"</string>
+    <string name="games_tools">"Games and favorite devices"</string>
+    <string name="invitation_title">"Network invitation · QR"</string>
+    <string name="invitation_connect">"Connect VPN to accept this invitation? You will then confirm joining the network."</string>
+    <string name="invitation_invalid">"Invalid invitation"</string>
+    <string name="kill_switch">"Block traffic if VLESS disconnects"</string>
+    <string name="kill_switch_hint">"In combined mode, traffic is blocked during failures and reconnects while the VPN service is running. Manual disconnection or Android stopping the app removes protection."</string>
+    <string name="traffic_blocked">"Traffic blocked"</string>
+    <string name="tile_hint">"Edit Android Quick Settings and add the Blue Network tile for quick connection."</string>
+    <string name="subscription_failed">"Subscription refresh failed; previous servers retained"</string>
+    <string name="server_switched">"Backup VLESS server selected"</string>
+    <string name="tool_failed">"Check or import failed"</string>
+    <string name="invitation_wait">"Invitation will be confirmed after VPN connects."</string>
+</resources>

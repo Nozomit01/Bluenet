@@ -1,0 +1,4 @@
+<resources>
+ <string name="app_name">Blue Network</string>
+ <string name="about">Unofficial Android client for Radmin VPN networks. Powered by OpenRad (MIT). Combined mode uses Xray (MPL-2.0) and tun2socks (MIT). Not affiliated with Famatech.</string>
+</resources>

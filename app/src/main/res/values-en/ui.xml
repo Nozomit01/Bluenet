@@ -1,0 +1,132 @@
+<resources>
+    <string name="ui_0" formatted="false">"Network icon"</string>
+    <string name="ui_1" formatted="false">"BLUE NETWORK"</string>
+    <string name="ui_2" formatted="false">"Radmin VPN on your Android"</string>
+    <string name="ui_3" formatted="false">"About"</string>
+    <string name="ui_4" formatted="false">"Your devices"</string>
+    <string name="ui_5" formatted="false">"Settings"</string>
+    <string name="ui_6" formatted="false">"One network. Closer together."</string>
+    <string name="ui_7" formatted="false">"Direct connection to Radmin VPN networks"</string>
+    <string name="ui_8" formatted="false">"YOUR NETWORKS"</string>
+    <string name="ui_9" formatted="false">"Networks"</string>
+    <string name="ui_10" formatted="false">"Devices"</string>
+    <string name="ui_11" formatted="false">"VPN status"</string>
+    <string name="ui_12" formatted="false">"VPN disconnected"</string>
+    <string name="ui_13" formatted="false">"Connect VPN and choose your network"</string>
+    <string name="ui_14" formatted="false">"Your address  ·  —"</string>
+    <string name="ui_15" formatted="false">"Connect"</string>
+    <string name="ui_16" formatted="false">"RECEIVED"</string>
+    <string name="ui_17" formatted="false">"SENT"</string>
+    <string name="ui_18" formatted="false">"DEVICES"</string>
+    <string name="ui_19" formatted="false">"0 B"</string>
+    <string name="ui_20" formatted="false">"VPN connected"</string>
+    <string name="ui_21" formatted="false">"Connecting…"</string>
+    <string name="ui_22" formatted="false">"Disconnecting…"</string>
+    <string name="ui_23" formatted="false">"Connection failed"</string>
+    <string name="ui_24" formatted="false">"Add a network to connect with devices"</string>
+    <string name="ui_25" formatted="false">"Connected networks: "</string>
+    <string name="ui_26" formatted="false">"Waiting to reconnect"</string>
+    <string name="ui_27" formatted="false">"Connecting to server"</string>
+    <string name="ui_28" formatted="false">"Direct client for Radmin VPN networks"</string>
+    <string name="ui_29" formatted="false">"Disconnect VPN"</string>
+    <string name="ui_30" formatted="false">"Cancel connection"</string>
+    <string name="ui_31" formatted="false">"Your address  ·  "</string>
+    <string name="ui_32" formatted="false">"The server did not confirm the result. Reconnect to reload your networks."</string>
+    <string name="ui_33" formatted="false">"Action failed"</string>
+    <string name="ui_34" formatted="false">"OK"</string>
+    <string name="ui_35" formatted="false">"Response time: "</string>
+    <string name="ui_36" formatted="false">"%.1f ms"</string>
+    <string name="ui_37" formatted="false">"The device did not respond. Check your connection."</string>
+    <string name="ui_38" formatted="false">"Startup error"</string>
+    <string name="ui_39" formatted="false">"Could not load the network engine"</string>
+    <string name="ui_40" formatted="false">"CONNECTION SETTINGS"</string>
+    <string name="ui_41" formatted="false">"DEVICES IN YOUR NETWORKS"</string>
+    <string name="ui_42" formatted="false">"DEVICES IN SELECTED NETWORK"</string>
+    <string name="ui_43" formatted="false">"No networks yet"</string>
+    <string name="ui_44" formatted="false">"Enter the name and password of\nthe network you use in Radmin VPN"</string>
+    <string name="ui_45" formatted="false">"Join a network"</string>
+    <string name="ui_46" formatted="false">"Create a network"</string>
+    <string name="ui_47" formatted="false">"Regular internet connects directly.\nVPN connects you to network members."</string>
+    <string name="ui_48" formatted="false">"Members: "</string>
+    <string name="ui_49" formatted="false">"Network actions: "</string>
+    <string name="ui_50" formatted="false">"Show devices"</string>
+    <string name="ui_51" formatted="false">"Leave network"</string>
+    <string name="ui_52" formatted="false">"Leave this network?"</string>
+    <string name="ui_53" formatted="false">"Cancel"</string>
+    <string name="ui_54" formatted="false">"Leave"</string>
+    <string name="ui_55" formatted="false">"No devices yet"</string>
+    <string name="ui_56" formatted="false">"After joining a network, its members and VPN addresses will appear here."</string>
+    <string name="ui_57" formatted="false">"Showing the first 200 devices"</string>
+    <string name="ui_58" formatted="false">"Device"</string>
+    <string name="ui_59" formatted="false">"Close"</string>
+    <string name="ui_60" formatted="false">"Copy IP"</string>
+    <string name="ui_61" formatted="false">"Test connection"</string>
+    <string name="ui_62" formatted="false">"Network name"</string>
+    <string name="ui_63" formatted="false">"As in Radmin VPN"</string>
+    <string name="ui_64" formatted="false">"Password"</string>
+    <string name="ui_65" formatted="false">"Network password"</string>
+    <string name="ui_66" formatted="false">"Public network, no password"</string>
+    <string name="ui_67" formatted="false">"The password is not saved on this device"</string>
+    <string name="ui_68" formatted="false">"Create"</string>
+    <string name="ui_69" formatted="false">"Join"</string>
+    <string name="ui_70" formatted="false">"Enter a network name without control characters"</string>
+    <string name="ui_71" formatted="false">"Password: 6–256 characters, no control characters"</string>
+    <string name="ui_72" formatted="false">"Network creation request sent"</string>
+    <string name="ui_73" formatted="false">"Join request sent"</string>
+    <string name="ui_74" formatted="false">"VPN permission was not granted"</string>
+    <string name="ui_75" formatted="false">"Diagnostics saved without addresses, names or secrets"</string>
+    <string name="ui_76" formatted="false">"Could not save diagnostics"</string>
+    <string name="ui_77" formatted="false">"Could not start VPN. Open the app and try again."</string>
+    <string name="ui_78" formatted="false">"Device name"</string>
+    <string name="ui_79" formatted="false">"Other network members will see this name"</string>
+    <string name="ui_80" formatted="false">"Save"</string>
+    <string name="ui_81" formatted="false">"Enter a name without control characters"</string>
+    <string name="ui_82" formatted="false">"Name will apply on the next connection"</string>
+    <string name="ui_83" formatted="false">"LAN game discovery"</string>
+    <string name="ui_84" formatted="false">"Forward broadcast queries between network members"</string>
+    <string name="ui_85" formatted="false">"Relay only"</string>
+    <string name="ui_86" formatted="false">"Helps when direct connections are blocked"</string>
+    <string name="ui_87" formatted="false">"Auto reconnect"</string>
+    <string name="ui_88" formatted="false">"After Wi-Fi changes or disconnects: up to five attempts"</string>
+    <string name="ui_89" formatted="false">"Changes apply on the next connection"</string>
+    <string name="ui_90" formatted="false">"Save diagnostics"</string>
+    <string name="ui_91" formatted="false">"Versions, status, counters and connection types only. No IPs, network names, passwords or keys."</string>
+    <string name="ui_92" formatted="false">"Blue Network · "</string>
+    <string name="ui_93" formatted="false">"Unofficial Radmin VPN client\nAndroid 8.0 and later"</string>
+    <string name="ui_94" formatted="false">"Could not prepare diagnostics"</string>
+    <string name="ui_95" formatted="false">"Blue Network"</string>
+    <string name="ui_96" formatted="false">"\n\nVersion "</string>
+    <string name="ui_97" formatted="false">" · Android 8.0+\n\nNetwork passwords are not saved. The device profile is protected by Android Keystore."</string>
+    <string name="ui_98" formatted="false">"Licenses"</string>
+    <string name="ui_99" formatted="false">"App licenses"</string>
+    <string name="ui_100" formatted="false">"MIT license"</string>
+    <string name="ui_101" formatted="false">"VPN address"</string>
+    <string name="ui_102" formatted="false">"IP address copied"</string>
+    <string name="ui_103" formatted="false">" B"</string>
+    <string name="ui_104" formatted="false">"%.1f KB"</string>
+    <string name="ui_105" formatted="false">"%.1f MB"</string>
+    <string name="ui_106" formatted="false">"%.1f GB"</string>
+    <string name="ui_107" formatted="false">"Connected"</string>
+    <string name="ui_108" formatted="false">"Connecting…"</string>
+    <string name="ui_109" formatted="false">"Online"</string>
+    <string name="ui_110" formatted="false">"Connection refused"</string>
+    <string name="ui_111" formatted="false">"No connection"</string>
+    <string name="ui_112" formatted="false">"Unavailable"</string>
+    <string name="ui_113" formatted="false">"Offline"</string>
+    <string name="ui_114" formatted="false">"Direct · TCP"</string>
+    <string name="ui_115" formatted="false">"Direct · UDP"</string>
+    <string name="ui_116" formatted="false">"Relay"</string>
+    <string name="ui_117" formatted="false">"You joined the network "</string>
+    <string name="ui_118" formatted="false">"Network created: "</string>
+    <string name="ui_119" formatted="false">"You left the network"</string>
+    <string name="ui_120" formatted="false">"Request sent. Waiting for network administrator approval."</string>
+    <string name="ui_121" formatted="false">"Action completed"</string>
+    <string name="ui_122" formatted="false">"Check your internet connection and reconnect"</string>
+    <string name="ui_128" formatted="false">"Check the network name and password"</string>
+    <string name="ui_130" formatted="false">"Allow the app to create a VPN connection"</string>
+    <string name="ui_131" formatted="false">"Wait for the previous action to finish"</string>
+    <string name="ui_132" formatted="false">"Server not responding. Check your internet and try again"</string>
+    <string name="ui_133" formatted="false">"The server rejected the request. Check the network name and permissions"</string>
+    <string name="ui_134" formatted="false">"Check the network name: 1–255 characters"</string>
+    <string name="ui_135" formatted="false">"Could not connect. Check your internet and try again"</string>
+</resources>
