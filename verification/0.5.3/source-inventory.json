@@ -9,11 +9,11 @@
   },
   {
     "path": "LICENSE",
-    "sha256": "0bec9366cad97725329ed83472d9ead8a8131684744a44a5ee551a484a07c6c8"
+    "sha256": "5712f5af195ce364d2f11fe242b59b6e6460a75c103d72f0f501b4c8d7dd24d7"
   },
   {
     "path": "README.md",
-    "sha256": "4260c39984c6755655c1207adadd18c907cb36c7424de4775256cc5c95ec508e"
+    "sha256": "bc9e8d5f6386cc91c59b2f60c92fb9c996fc334fb6a7916b22dceba167a71537"
   },
   {
     "path": "SECURITY-REVIEW.md",
