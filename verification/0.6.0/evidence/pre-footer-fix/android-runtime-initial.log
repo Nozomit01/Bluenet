@@ -1,0 +1,54 @@
+INSTRUMENTATION_RESULT: accessible_connection_signals=PASS
+INSTRUMENTATION_RESULT: adaptive_layout_and_release_history=PASS
+INSTRUMENTATION_RESULT: android_xray_process_fd_and_mux=PASS
+INSTRUMENTATION_RESULT: bounded_private_error_log=PASS
+INSTRUMENTATION_RESULT: bounded_reconnect_policy=PASS
+INSTRUMENTATION_RESULT: chat_activity_launch=PASS
+INSTRUMENTATION_RESULT: chat_delivery_confirmation=PASS
+INSTRUMENTATION_RESULT: chat_encrypted_history_bounds=PASS
+INSTRUMENTATION_RESULT: chat_membership_boundary=PASS
+INSTRUMENTATION_RESULT: chat_wire_validation=PASS
+INSTRUMENTATION_RESULT: combined_route_isolation=PASS
+INSTRUMENTATION_RESULT: connection_assistant=PASS
+INSTRUMENTATION_RESULT: diagnostics_redaction=PASS
+INSTRUMENTATION_RESULT: encrypted_catalog_selection_and_failover=PASS
+INSTRUMENTATION_RESULT: english_dark_activity_launch=PASS
+INSTRUMENTATION_RESULT: failure=AssertionError: card UI
+INSTRUMENTATION_RESULT: failure_stack=java.lang.AssertionError: card UI
+	at ru.bluenet.vpn.GameCardUiChecks.main(GameCardUiChecks.java:14)
+	at ru.bluenet.vpn.GameCardUiChecks.run(GameCardUiChecks.java:29)
+	at ru.bluenet.vpn.GameCardChecks.run(GameCardChecks.java:31)
+	at ru.bluenet.vpn.RuntimeSmokeInstrumentation.onStart(RuntimeSmokeInstrumentation.java:244)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2594)
+Caused by: java.lang.AssertionError: published fields/recipient missing
+	at ru.bluenet.vpn.GameCardUiChecks.check(GameCardUiChecks.java:13)
+	at ru.bluenet.vpn.GameCardUiChecks.lambda$run$3(GameCardUiChecks.java:29)
+	at ru.bluenet.vpn.GameCardUiChecks$$ExternalSyntheticLambda15.run(D8$$SyntheticClass:0)
+	at ru.bluenet.vpn.GameCardUiChecks.lambda$main$0(GameCardUiChecks.java:14)
+	at ru.bluenet.vpn.GameCardUiChecks$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2612)
+	at android.os.Handler.handleCallback(Handler.java:959)
+	at android.os.Handler.dispatchMessage(Handler.java:100)
+	at android.os.Looper.loopOnce(Looper.java:232)
+	at android.os.Looper.loop(Looper.java:317)
+	at android.app.ActivityThread.main(ActivityThread.java:8705)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:580)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:886)
+
+INSTRUMENTATION_RESULT: floating_overlay_lifecycle=PASS
+INSTRUMENTATION_RESULT: game_port_virtual_path_and_tcp_correlation=PASS
+INSTRUMENTATION_RESULT: invitation_qr_roundtrip=PASS
+INSTRUMENTATION_RESULT: jni_load=PASS
+INSTRUMENTATION_RESULT: jni_worker_failure_lifecycle=PASS
+INSTRUMENTATION_RESULT: keystore_roundtrip=PASS
+INSTRUMENTATION_RESULT: language_theme_persistence=PASS
+INSTRUMENTATION_RESULT: mux_early_cancel=PASS
+INSTRUMENTATION_RESULT: per_app_dispatch_and_fail_closed_tun=PASS
+INSTRUMENTATION_RESULT: probe_loss_and_rtt_history=PASS
+INSTRUMENTATION_RESULT: profile_bounds_and_registration_guard=PASS
+INSTRUMENTATION_RESULT: subscription_formats_and_bounds=PASS
+INSTRUMENTATION_RESULT: tool_screens_launch=PASS
+INSTRUMENTATION_RESULT: vless_import_validation=PASS
+INSTRUMENTATION_RESULT: vpn_tun_ownership=PASS
+INSTRUMENTATION_CODE: 0

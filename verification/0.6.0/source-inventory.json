@@ -1,11 +1,11 @@
 [
   {
     "path": ".gitattributes",
-    "sha256": "dedb68c8d4c3529c689ff733322721c782316ac30c08bcceebba4af8bcb0e3b2"
+    "sha256": "6547a4e9f8a90222cca9f629a3f780f5886d14c0ea0d06a21ab5797962d0ff59"
   },
   {
     "path": ".gitignore",
-    "sha256": "38bc3b5849873655e62637b13fa65b9eb3e1149377c4c1018472c08707e628ef"
+    "sha256": "53e59c4fc387ea6e74fba59729721291b08cc41ad2fc643067b87af1d4f2a1ae"
   },
   {
     "path": "CHANGELOG.md",

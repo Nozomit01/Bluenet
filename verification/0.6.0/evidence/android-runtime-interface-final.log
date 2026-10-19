@@ -1,0 +1,6 @@
+INSTRUMENTATION_RESULT: accessible_connection_signals=PASS
+INSTRUMENTATION_RESULT: adaptive_layout_and_release_history=PASS
+INSTRUMENTATION_RESULT: connection_assistant=PASS
+INSTRUMENTATION_RESULT: game_world_cards=PASS
+INSTRUMENTATION_RESULT: tests_passed=4
+INSTRUMENTATION_CODE: -1

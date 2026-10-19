@@ -1,0 +1,21 @@
+INSTRUMENTATION_RESULT: bounded_private_error_log=PASS
+INSTRUMENTATION_RESULT: bounded_reconnect_policy=PASS
+INSTRUMENTATION_RESULT: combined_route_isolation=PASS
+INSTRUMENTATION_RESULT: diagnostics_redaction=PASS
+INSTRUMENTATION_RESULT: failure=IOException: vless_engine
+INSTRUMENTATION_RESULT: failure_stack=java.io.IOException: vless_engine
+	at ru.bluenet.vpn.ProxyEngine.start(ProxyEngine.java:31)
+	at ru.bluenet.vpn.ProxyEngine.start(ProxyEngine.java:14)
+	at ru.bluenet.vpn.PacketMux.start(PacketMux.java:44)
+	at ru.bluenet.vpn.BlueVpnService.createTun(BlueVpnService.java:204)
+	at ru.bluenet.vpn.RuntimeSmokeInstrumentation.onStart(RuntimeSmokeInstrumentation.java:106)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2594)
+
+INSTRUMENTATION_RESULT: jni_load=PASS
+INSTRUMENTATION_RESULT: jni_worker_failure_lifecycle=PASS
+INSTRUMENTATION_RESULT: keystore_roundtrip=PASS
+INSTRUMENTATION_RESULT: language_theme_persistence=PASS
+INSTRUMENTATION_RESULT: profile_bounds_and_registration_guard=PASS
+INSTRUMENTATION_RESULT: vless_import_validation=PASS
+INSTRUMENTATION_RESULT: vpn_tun_ownership=PASS
+INSTRUMENTATION_CODE: 0

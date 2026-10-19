@@ -1,0 +1,23 @@
+INSTRUMENTATION_RESULT: failure=IllegalArgumentException: Targeted input event injection from pid 5322 was not directed at a window owned by uid 10209.
+INSTRUMENTATION_RESULT: failure_stack=java.lang.IllegalArgumentException: Targeted input event injection from pid 5322 was not directed at a window owned by uid 10209.
+	at android.os.Parcel.createExceptionOrNull(Parcel.java:3246)
+	at android.os.Parcel.createException(Parcel.java:3226)
+	at android.os.Parcel.readException(Parcel.java:3209)
+	at android.os.Parcel.readException(Parcel.java:3151)
+	at android.hardware.input.IInputManager$Stub$Proxy.injectInputEventToTarget(IInputManager.java:1542)
+	at android.hardware.input.InputManagerGlobal.injectInputEvent(InputManagerGlobal.java:1388)
+	at android.app.Instrumentation.syncInputTransactionsAndInjectEventIntoSelf(Instrumentation.java:1303)
+	at android.app.Instrumentation.sendPointerSync(Instrumentation.java:1288)
+	at ru.bluenet.vpn.GameCardUiChecks.tapCancel(GameCardUiChecks.java:28)
+	at ru.bluenet.vpn.GameCardUiChecks.run(GameCardUiChecks.java:54)
+	at ru.bluenet.vpn.GameCardChecks.run(GameCardChecks.java:31)
+	at ru.bluenet.vpn.RuntimeSmokeInstrumentation.onStart(RuntimeSmokeInstrumentation.java:29)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2594)
+Caused by: android.os.RemoteException: Remote stack trace:
+	at com.android.server.input.InputManagerService.injectInputEventToTarget(InputManagerService.java:919)
+	at android.hardware.input.IInputManager$Stub.onTransact(IInputManager.java:727)
+	at android.os.Binder.execTransactInternal(Binder.java:1505)
+	at android.os.Binder.execTransact(Binder.java:1444)
+
+
+INSTRUMENTATION_CODE: 0

@@ -1,0 +1,10 @@
+INSTRUMENTATION_RESULT: failure=AssertionError: Cancel dialog did not acquire stable input focus within 5s
+INSTRUMENTATION_RESULT: failure_stack=java.lang.AssertionError: Cancel dialog did not acquire stable input focus within 5s
+	at ru.bluenet.vpn.GameCardUiChecks.check(GameCardUiChecks.java:13)
+	at ru.bluenet.vpn.GameCardUiChecks.tapCancel(GameCardUiChecks.java:35)
+	at ru.bluenet.vpn.GameCardUiChecks.run(GameCardUiChecks.java:64)
+	at ru.bluenet.vpn.GameCardChecks.run(GameCardChecks.java:31)
+	at ru.bluenet.vpn.RuntimeSmokeInstrumentation.onStart(RuntimeSmokeInstrumentation.java:29)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2594)
+
+INSTRUMENTATION_CODE: 0
