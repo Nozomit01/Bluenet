@@ -1,0 +1,12 @@
+{
+  "production_sources_unchanged": true,
+  "changed_test_files": [
+    "app/src/androidTest/java/ru/bluenet/vpn/GameCardUiChecks.java",
+    "app/src/androidTest/java/ru/bluenet/vpn/RuntimeSmokeInstrumentation.java"
+  ],
+  "new_test_sha256": {
+    "app/src/androidTest/java/ru/bluenet/vpn/GameCardUiChecks.java": "c4c9cce6e1cad428627d0f8a5b26221ddb7181ba981ef0cc7fdc0d25624438f6",
+    "app/src/androidTest/java/ru/bluenet/vpn/RuntimeSmokeInstrumentation.java": "0e28f5454d4adabd9fa72fe3e41e1eba4a66a55d0d5470ccd6fd884fdf31c6b1"
+  },
+  "reason": "Separate asynchronous Dialog OnShow callback from compose click and preview inspection; preserve assertions and add focused selector"
+}

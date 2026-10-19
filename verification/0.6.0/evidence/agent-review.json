@@ -1,0 +1,100 @@
+{
+  "version": "0.6.0",
+  "roles": {
+    "connection_assistant": "/root/connection_author",
+    "accessibility": "/root/accessibility_author",
+    "game_cards": "/root/cards_author",
+    "reviewer": "/root/implementation_reviewer",
+    "acceptance": "/root/acceptance_judge"
+  },
+  "review_result": "PASS: source, final screenshot matrix, complete focused4 and independent baseline27 union, installed APK identity",
+  "returned_and_fixed": [
+    "B3 overlay dialog ownership, detach cleanup and permission-revocation races",
+    "E3 manual-stop flag reset on idle and new engine generation",
+    "B3 real Russian fontScale2 Cancel clipped: reserve full button footer and add visible-target/real-pointer checks"
+  ],
+  "frozen_sources": {
+    "app/src/androidTest/java/ru/bluenet/vpn/AccessibilityChecks.java": "2d2e45a005b6eaada02412e50006bef21665dc16eca5b792e5b6fd2fbc450390",
+    "app/src/androidTest/java/ru/bluenet/vpn/FlowOwnerFixtureService.java": "66184a7bf3d9eced9ffafa7edeb2efed23758b9e765e4edd85c04e579df28bfa",
+    "app/src/androidTest/java/ru/bluenet/vpn/GameCardChecks.java": "947fd965b86af4ebf556264d03141a5cade5fe16581490f20988f9774cd12671",
+    "app/src/androidTest/java/ru/bluenet/vpn/GameCardUiChecks.java": "54e0999dc0a0b9323d236e7085914e929be8c64483364ef8de26c689bf20d3a0",
+    "app/src/androidTest/java/ru/bluenet/vpn/LayoutChecks.java": "8a5907377c76da53b750b9417339b97cad6fdccb1a40e2c75884bc37d233ea1b",
+    "app/src/androidTest/java/ru/bluenet/vpn/RuntimeSmokeInstrumentation.java": "e4b3411d3d4e84a64aaeedbb97517a103da8fbe1414453913079c6d37ea6152a",
+    "app/src/androidTest/java/ru/bluenet/vpn/TroubleshootChecks.java": "0eafffca143b8cbe46ad1b54da40ebd39d38c6238c8175f2e5afa71c7c3fa53c",
+    "app/src/main/java/ru/bluenet/vpn/BlueVpnService.java": "137d8344040e20f59905f3685ea782035a8f77e13f4b5d65c0f2932b8aa73e2f",
+    "app/src/main/java/ru/bluenet/vpn/ChatActivity.java": "23c3510365beead1e2043bc22e33485daac8d0d85af6fe9a730ecfdf1b87f609",
+    "app/src/main/java/ru/bluenet/vpn/ChatEngine.java": "f7d3a9937f4802c42d902c9e32fcba323425acd01037959962e30790e0bd83a6",
+    "app/src/main/java/ru/bluenet/vpn/ChatPanel.java": "48dcc5df42f5197728bb452aa47d5bb387583169b75dd3c7333a726e115bb9ce",
+    "app/src/main/java/ru/bluenet/vpn/ChatStore.java": "d8a456db95a453fb68ef1e88093bc3d77347f0070992aeab7ebb181c6fc9e01b",
+    "app/src/main/java/ru/bluenet/vpn/ChatWire.java": "3fd1101bfc77855c1209310a5533760acf694883ea1c41be71ad92cb5eb3b684",
+    "app/src/main/java/ru/bluenet/vpn/ConnectionAccessibility.java": "876c57d19cf183bfee70dd07a05142fc98bf29cb8b29fb6d26d1c6123429df66",
+    "app/src/main/java/ru/bluenet/vpn/ConnectionAnnouncements.java": "1a22ffce673c377365dbe6ea4004df9789459909d4c674b7ac81930d81caf3b0",
+    "app/src/main/java/ru/bluenet/vpn/DiagnosticReport.java": "9a9fa93ad23c778283554e2c9301a02a190da084253a22e8f57885613217baea",
+    "app/src/main/java/ru/bluenet/vpn/EasyUi.java": "3f1367e87aaa0534a614f415738e5ff4bfb89d7bd1136797e9d5fdc0bf67e2e0",
+    "app/src/main/java/ru/bluenet/vpn/ErrorCatalog.java": "22f49b0871406fd75571ea2cccfce0a1483c640519ef709314ab95538b0d4a39",
+    "app/src/main/java/ru/bluenet/vpn/EventLog.java": "514f2be7e24b4bee079b1b0837821bb9642ec70d0f8ebee3bda081f903a7c291",
+    "app/src/main/java/ru/bluenet/vpn/FeatureActivity.java": "19cc2352fd7ce5a3eae491415ab09cc010d2bee962b50157d0369789d04b28dc",
+    "app/src/main/java/ru/bluenet/vpn/GameCard.java": "fa355ccfea98c18c41620d90405a4f68e3618c237ad9884e7fe5eea892c94b9b",
+    "app/src/main/java/ru/bluenet/vpn/GameCardUi.java": "6438962ff99a67a1815835d4ec36de2dcf48f645ed59be0d2fd0b9433ef67f26",
+    "app/src/main/java/ru/bluenet/vpn/IdentityStore.java": "aa4dc629747194cc295fec3ee27c08875b030b313d3b4f7bdcddfd33919f464b",
+    "app/src/main/java/ru/bluenet/vpn/Invitation.java": "481f69265650c2b2c9e2e2231500293e37ab4705b5ca51349b6d7946ed11d2a5",
+    "app/src/main/java/ru/bluenet/vpn/MainActivity.java": "4663c0b62b1e5c4b5a1e548d487274336ffc6f03788d11526f1591bfcc9cfde1",
+    "app/src/main/java/ru/bluenet/vpn/NativeBridge.java": "10c981553abbafa60cb8c7f592c37dd97e1a2f1bb9ad22333d4e474791ea91f6",
+    "app/src/main/java/ru/bluenet/vpn/NetworkDeadline.java": "5d49c9f76574cc92dd0eeb1d5113627cf50ba715556d9f6806969d4db1708c84",
+    "app/src/main/java/ru/bluenet/vpn/NetworkProbe.java": "cb9f7316aca35bd4a5472a61fd76977b20b8219f2ca19ce67b4daf92a547890d",
+    "app/src/main/java/ru/bluenet/vpn/PacketMux.java": "083615236fb36739dd2e85f5065b7c3aee5fe5168b2bf7dd3a5608d8899aa2db",
+    "app/src/main/java/ru/bluenet/vpn/PacketPolicy.java": "db94e128c840192c8b8c5012b9d9c19457427b12ca66035e4e830984b4a19d45",
+    "app/src/main/java/ru/bluenet/vpn/ProxyEngine.java": "87a492e8cec33b72c21a5a1c1dc1b27e5a08ea69ab3a6b10bea664eaaa4722a1",
+    "app/src/main/java/ru/bluenet/vpn/QualityMonitor.java": "c8330a07a651c2529ceb356cc8fddcd87f425e2beda9cf838bb4e413acbcbe40",
+    "app/src/main/java/ru/bluenet/vpn/QuickBubbleService.java": "23907d2b13c929a1facf360ced6612f0a4ac2c4f8825b3db0694cae261dd93c6",
+    "app/src/main/java/ru/bluenet/vpn/QuickConnectActivity.java": "2f275c7fdfce30238a483418c33b267d372585c89f4765ad0ae5f0ba226f1674",
+    "app/src/main/java/ru/bluenet/vpn/ReconnectPolicy.java": "ca956cbbdd88dc9ee1ed42d2707d49a0746bb1a1cdf90582b4b15b23a3628d79",
+    "app/src/main/java/ru/bluenet/vpn/ReleaseNotes.java": "4ec71bcfd576806a4228065a37a6f11a3f3450a3bf5a75c6e52e632f76ad9907",
+    "app/src/main/java/ru/bluenet/vpn/ReleaseNotesActivity.java": "2b57882902bbc29e09d8abf48314239ee8ca4605c7c47a3e17cd2fac869ce81e",
+    "app/src/main/java/ru/bluenet/vpn/ServerCatalog.java": "3104a78dfb874987105056e31a6455e07a03d4e714e5f2c9a869b13993f47450",
+    "app/src/main/java/ru/bluenet/vpn/SignalView.java": "9817d7bda99229b41531df91bb5496e15178b0b1ea2ba068dfd29d5f7fa7e1bd",
+    "app/src/main/java/ru/bluenet/vpn/SubscriptionJob.java": "0067967bcec456a7a7110813f0ff61944100fc6f4dfe657cae0bf1ec1f082bc8",
+    "app/src/main/java/ru/bluenet/vpn/TroubleshootActivity.java": "9289f4cce3f0e5d75c2a8430ded61010310aefdef06f00db0f5e3f378d7c304c",
+    "app/src/main/java/ru/bluenet/vpn/TroubleshootModel.java": "ec352e268b6a8ef2235cd78154682db89695a99bb04ab25180b7bc4a27f6d7ef",
+    "app/src/main/java/ru/bluenet/vpn/UiPreferences.java": "0d6f9773d771b42b9d53fda373e67ac84d77f1adcddf6147a54900843baac463",
+    "app/src/main/java/ru/bluenet/vpn/VlessProfile.java": "15d1cfe25e896149bcac2dd2922a7f8294f06244545a8ddb756fec4335a35ec6",
+    "app/src/main/java/ru/bluenet/vpn/VpnTile.java": "45300a437b79c549bfb2b4f4880f7f03281cc17015354e90aa7d11b97e7df134"
+  },
+  "runtime_expected_groups": 31,
+  "limitations": [
+    "Physical TalkBack speech/vibration not validated by deterministic policy tests",
+    "Synthetic chat and TCP endpoints do not establish real two-phone/Windows interoperability"
+  ],
+  "pre_footer_fix_result": "RETURN: real RU fontScale2 dialog Cancel clipped; new production build required",
+  "pre_footer_fix_sha256": "e803be2c9b9372b7c9879ac18895d08c4ded912cf497a312c50ad83e9070bfc6",
+  "previous_role_names": {
+    "connection_assistant": "release_notes",
+    "accessibility": "ideas_product",
+    "game_cards": "resource_analysis",
+    "reviewer": "ui_verification",
+    "acceptance": "ideas_judge"
+  },
+  "frozen_sources_stage": "Initial source-review snapshot before footer and test synchronization corrections. Final APK source snapshot: final-build-sources.json; final test snapshot: final-test-sources.json",
+  "final_decision": "ACCEPT",
+  "test_only_corrections": [
+    "compose OnShow listener synchronization",
+    "same-task real Activity resume/window focus barriers",
+    "stable dialog input focus before actual Cancel tap"
+  ],
+  "known_layout_limit": "Synthetic 240dp-height 2x-text troubleshooting fixture shows toolbar only with portrait insets retained; actual landscape/IME usability is not established.",
+  "final_reviewer": "/root/implementation_reviewer",
+  "final_acceptance": "/root/acceptance_judge",
+  "final_apk_sha256": "ffa2613bd88608c00185a86317701c1ba6903a5b5c55da66efca11cd34fd5e2f",
+  "unique_groups_verified": 31,
+  "aggregation_runs": [
+    "android-runtime-layout-return.log:27 unique PASS",
+    "android-runtime-interface-final.log:4 complete unique PASS"
+  ],
+  "single_all_green_complete_run": false,
+  "retained_failure": "android-runtime-engine-return.log: IOException vless_engine at socket readiness guard; root cause unresolved",
+  "final_runtime_limits": [
+    "Synthetic 240dp×2x troubleshooting toolbar-only case; actual landscape/IME usability unverified",
+    "Real TalkBack speech and physical haptics unverified",
+    "Physical ARM devices and actual two-device Radmin/Windows interoperability unverified"
+  ]
+}

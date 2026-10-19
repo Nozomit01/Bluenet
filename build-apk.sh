@@ -21,7 +21,7 @@ done
 python3 create-signing-key.py
 ./gradlew --no-daemon :app:assembleRelease :app:lintRelease
 mkdir -p dist
-cp app/build/outputs/apk/release/app-release.apk dist/BlueNetwork-0.5.3.apk
-"$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose dist/BlueNetwork-0.5.3.apk
-"$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -P 16 4 dist/BlueNetwork-0.5.3.apk
-sha256sum dist/BlueNetwork-0.5.3.apk > dist/BlueNetwork-0.5.3.apk.sha256
+cp app/build/outputs/apk/release/app-release.apk dist/BlueNetwork-0.6.0.apk
+"$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose dist/BlueNetwork-0.6.0.apk
+"$ANDROID_HOME/build-tools/35.0.0/zipalign" -c -P 16 4 dist/BlueNetwork-0.6.0.apk
+sha256sum dist/BlueNetwork-0.6.0.apk > dist/BlueNetwork-0.6.0.apk.sha256

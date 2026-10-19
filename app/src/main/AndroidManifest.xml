@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -15,6 +16,7 @@
             <intent-filter><action android:name="android.intent.action.VIEW"/><category android:name="android.intent.category.DEFAULT"/><category android:name="android.intent.category.BROWSABLE"/><data android:scheme="bluenet" android:host="join"/></intent-filter>
         </activity>
         <activity android:name=".QuickConnectActivity" android:exported="false"/>
+        <activity android:name=".TroubleshootActivity" android:exported="false"/>
         <activity android:name=".ReleaseNotesActivity" android:exported="false"/>
         <activity android:name=".ChatActivity" android:exported="false"/>
         <service android:name=".QuickBubbleService" android:exported="false" android:foregroundServiceType="specialUse"><property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="User-enabled floating VPN controls and private network chat over games"/></service>

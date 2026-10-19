@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.View;
@@ -31,6 +32,16 @@ final class LayoutChecks {
     private static void onMain(Instrumentation instrumentation,Runnable task){java.util.concurrent.atomic.AtomicReference<Throwable> failure=new java.util.concurrent.atomic.AtomicReference<>();instrumentation.runOnMainSync(()->{try{task.run();}catch(Throwable error){failure.set(error);}});if(failure.get()!=null)throw new AssertionError("Layout check failed",failure.get());}
     private static int dp(Context c,int value){return Math.round(value*c.getResources().getDisplayMetrics().density);}
     private static Object field(Object target,String name)throws Exception{Field f=target.getClass().getDeclaredField(name);f.setAccessible(true);return f.get(target);}
+    private static void awaitMainForeground(Instrumentation instrumentation,MainActivity activity,boolean expected){
+        long deadline=SystemClock.uptimeMillis()+5000;
+        boolean[] ready={false};
+        do{
+            onMain(instrumentation,()->{try{ready[0]=((Boolean)field(activity,"foreground"))==expected&&(!expected||activity.hasWindowFocus())&&!activity.isFinishing();}catch(Exception e){throw new RuntimeException(e);}});
+            if(ready[0])return;
+            SystemClock.sleep(25);
+        }while(SystemClock.uptimeMillis()<deadline);
+        throw new AssertionError("MainActivity did not "+(expected?"resume with window focus":"pause for the tool")+" within five seconds");
+    }
     private static List<View> descendants(View root){List<View> all=new ArrayList<>();all.add(root);if(root instanceof ViewGroup){ViewGroup group=(ViewGroup)root;for(int i=0;i<group.getChildCount();i++)all.addAll(descendants(group.getChildAt(i)));}return all;}
     private static void layout(View view,int width,int height){view.measure(View.MeasureSpec.makeMeasureSpec(width,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(height,View.MeasureSpec.EXACTLY));view.layout(0,0,width,height);}
     private static Rect bounds(ViewGroup root,View child){Rect box=new Rect(0,0,child.getWidth(),child.getHeight());root.offsetDescendantRectToMyCoords(child,box);return box;}
@@ -46,7 +57,7 @@ final class LayoutChecks {
                 String theme=language.equals("ru")?"light":"dark";
                 preferences.edit().putString("language",language).putString("theme",theme).commit();
                 List<ReleaseNotes.Entry> releases=ReleaseNotes.load(context);
-                String[] versions={"0.5.3","0.5.2","0.5.1","0.5.0","0.4.0","0.3.0","0.2.0","0.1.0"};
+                String[] versions={"0.6.0","0.5.3","0.5.2","0.5.1","0.5.0","0.4.0","0.3.0","0.2.0","0.1.0"};
                 require(releases.size()==versions.length,"Offline release history must include every published version");
                 for(int i=0;i<versions.length;i++){
                     ReleaseNotes.Entry entry=releases.get(i);require(entry.version.equals(versions[i]),"Release history order/version mismatch");
@@ -83,15 +94,26 @@ final class LayoutChecks {
                         for(String tag:new String[]{"settings-appearance","settings-game","settings-connection","settings-checks"})require(root.findViewWithTag(tag)!=null,"Missing settings section "+tag);
                         ScrollView mainScroll=(ScrollView)field(activity,"mainScroll");mainScroll.scrollTo(0,dp(activity,180));savedScroll[0]=mainScroll.getScrollY();require(savedScroll[0]>0,"Settings fixture must be scrolled before return");
                     }catch(Exception e){throw new RuntimeException(e);}});
-                    FeatureActivity feature=(FeatureActivity)instrumentation.startActivitySync(new Intent(context,FeatureActivity.class).putExtra("mode","servers").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    Instrumentation.ActivityMonitor toolMonitor=instrumentation.addMonitor(FeatureActivity.class.getName(),null,false);
+                    FeatureActivity feature;
+                    try{
+                        // Match openTools(): the tool must sit above this MainActivity in its task.
+                        onMain(instrumentation,()->activity.startActivity(new Intent(activity,FeatureActivity.class).putExtra("mode","servers")));
+                        android.app.Activity launched=instrumentation.waitForMonitorWithTimeout(toolMonitor,5000);
+                        require(launched instanceof FeatureActivity,"Tool did not launch within five seconds");
+                        feature=(FeatureActivity)launched;
+                    }finally{instrumentation.removeMonitor(toolMonitor);}
                     try{
                         instrumentation.waitForIdleSync();
+                        require(feature.getTaskId()==activity.getTaskId(),"Tool must return to the same MainActivity task");
+                        awaitMainForeground(instrumentation,activity,false);
                         preferences.edit().putBoolean("stay_awake",!oldAwake).commit();
                         onMain(instrumentation,()->{try{
                             Field busy=FeatureActivity.class.getDeclaredField("busy");busy.setAccessible(true);busy.setBoolean(feature,true);
                             View back=(View)field(feature,"backButton");require(back.isEnabled()&&back.performClick(),"Tool Back must remain usable while busy");require(feature.isFinishing(),"Busy tool Back did not close the screen");
                         }catch(Exception e){throw new RuntimeException(e);}});
-                        instrumentation.waitForIdleSync();
+                        // finish()/an idle queue do not guarantee that the underlying Activity resumed.
+                        awaitMainForeground(instrumentation,activity,true);
                         onMain(instrumentation,()->{try{
                             ViewGroup root=(ViewGroup)field(activity,"root");Switch awake=null;for(View view:descendants(root))if(view instanceof Switch){String value=((Switch)view).getText().toString();if(value.contains("Не гасить экран")||value.contains("Keep screen on"))awake=(Switch)view;}
                             require(awake!=null&&awake.isChecked()!=oldAwake,"Settings did not refresh after returning from a tool");

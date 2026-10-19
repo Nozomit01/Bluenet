@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Blue Network, O=Blue Network Android, C=RU
+Signer #1 certificate SHA-256 digest: 4d49fd4c4761d7b2e4e940b5075b1eac160031823c1848bff51dd6b8e611c900
+Signer #1 certificate SHA-1 digest: be5175561e9da66bd57d1742d931bb6225003f47
+Signer #1 certificate MD5 digest: 783b31c15760825cce8f57f87e564e7e
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 3072
+Signer #1 public key SHA-256 digest: c7232cd42e369febe5fcc70de63438ebe8f26009e2795665dfd91dbfb5b8b0c0
+Signer #1 public key SHA-1 digest: 1243bcd420542cccad6611952e7b8c22dfa49459
+Signer #1 public key MD5 digest: ebbfe60aa8ff47743ace297732a743f2

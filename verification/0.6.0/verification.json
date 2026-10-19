@@ -1,0 +1,94 @@
+{
+  "version": "0.6.0",
+  "version_code": 9,
+  "date_utc": "2026-10-19",
+  "apk_sha256": "ffa2613bd88608c00185a86317701c1ba6903a5b5c55da66efca11cd34fd5e2f",
+  "apk_bytes": 44753791,
+  "build": "pass",
+  "lint_summary": "0 errors, 19 warnings",
+  "signature": "same certificate as 0.5.3; APK v2",
+  "zipalign_16k": "pass",
+  "android": {
+    "status": "31 unique groups verified in two runs against the same signed final APK; no single all-green complete run",
+    "api": 35,
+    "abi": "x86_64",
+    "groups": [
+      "accessible_connection_signals",
+      "adaptive_layout_and_release_history",
+      "android_xray_process_fd_and_mux",
+      "bounded_private_error_log",
+      "bounded_reconnect_policy",
+      "chat_activity_launch",
+      "chat_delivery_confirmation",
+      "chat_encrypted_history_bounds",
+      "chat_membership_boundary",
+      "chat_wire_validation",
+      "combined_route_isolation",
+      "connection_assistant",
+      "diagnostics_redaction",
+      "encrypted_catalog_selection_and_failover",
+      "english_dark_activity_launch",
+      "floating_overlay_lifecycle",
+      "game_port_virtual_path_and_tcp_correlation",
+      "game_world_cards",
+      "invitation_qr_roundtrip",
+      "jni_load",
+      "jni_worker_failure_lifecycle",
+      "keystore_roundtrip",
+      "language_theme_persistence",
+      "mux_early_cancel",
+      "per_app_dispatch_and_fail_closed_tun",
+      "probe_loss_and_rtt_history",
+      "profile_bounds_and_registration_guard",
+      "subscription_formats_and_bounds",
+      "tool_screens_launch",
+      "vless_import_validation",
+      "vpn_tun_ownership"
+    ],
+    "runs": [
+      {
+        "log": "evidence/android-runtime-layout-return.log",
+        "passed_groups": 27,
+        "failed_group": "adaptive_layout_and_release_history",
+        "failure": "Settings return assertion before lifecycle completion; SystemUI ANR separately observed in this environment"
+      },
+      {
+        "log": "evidence/android-runtime-interface-final.log",
+        "passed_groups": 4,
+        "status": "PASS: complete Layout/A3/E3/B3 checks after test-only synchronization fixes"
+      }
+    ],
+    "production_sources_unchanged_after_build": true,
+    "test_fix": "evidence/test-synchronization.diff",
+    "retained_unsuccessful_rerun": {
+      "log": "evidence/android-runtime-engine-return.log",
+      "failure": "IOException vless_engine at ProxyEngine socket startup guard, 12-second deadline. Root cause unresolved; environment attribution is not proven."
+    },
+    "previous_apk": "evidence/pre-footer-fix contains rejected e803... APK evidence; excluded from final31 aggregation"
+  },
+  "native_libraries": {
+    "baseline": "0.5.3",
+    "unchanged": [
+      "lib/arm64-v8a/libbluenet.so",
+      "lib/arm64-v8a/libbluenet_proxy.so",
+      "lib/armeabi-v7a/libbluenet.so",
+      "lib/armeabi-v7a/libbluenet_proxy.so",
+      "lib/x86_64/libbluenet.so",
+      "lib/x86_64/libbluenet_proxy.so"
+    ]
+  },
+  "dependencies_changed": false,
+  "review_acceptance": "See evidence/agent-review.json",
+  "synthetic_layout_limitations": [
+    "TroubleshootActivity toolbar-only at manually constrained 240dp height with 2x text; test retains portrait window insets. Actual landscape/IME usability is not established."
+  ],
+  "not_tested": [
+    "Root cause of retained intermittent vless_engine startup failure on the software emulator",
+    "Real TalkBack speech and physical vibration",
+    "Physical ARM phones and OEM overlay/battery restrictions",
+    "Actual two-phone game-card chat over real Radmin networks",
+    "Real Happ/VLESS server and Windows interoperability in this release",
+    "Android8/9 runtime and long roaming/battery scenarios"
+  ],
+  "emulator_configuration": "Disposable software API35 x86_64 emulator, two CPUs; system_server_watchdog_timeout_ms=600000; hide_error_dialogs=1 after a SystemUI ANR occluded the test. Earlier failures retained."
+}

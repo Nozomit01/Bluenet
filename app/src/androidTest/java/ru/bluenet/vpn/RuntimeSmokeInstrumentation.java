@@ -15,7 +15,8 @@ import java.util.Arrays;
 
 /** Disposable-emulator checks. No Radmin server is contacted and no real profile is used. */
 public final class RuntimeSmokeInstrumentation extends Instrumentation {
-    @Override public void onCreate(Bundle arguments) { super.onCreate(arguments); start(); }
+    private boolean cardsOnly,interfaceOnly;
+    @Override public void onCreate(Bundle arguments) { super.onCreate(arguments); cardsOnly=arguments!=null&&"cards".equals(arguments.getString("only")); interfaceOnly=arguments!=null&&"interface".equals(arguments.getString("only")); start(); }
     private void check(boolean condition,String message) { if (!condition) throw new AssertionError(message); }
     @Override public void onStart() {
         Bundle results=new Bundle(); File profile=null; boolean ownsProfile=false;
@@ -24,7 +25,16 @@ public final class RuntimeSmokeInstrumentation extends Instrumentation {
             check(Build.HARDWARE.contains("ranchu")||Build.HARDWARE.contains("goldfish"),"Smoke tests require a disposable emulator");
             Context context=getTargetContext();profile=new File(context.getFilesDir(),"identity.enc");
             check(!new File(context.getFilesDir(),"vless.enc").exists()&&!new File(context.getFilesDir(),"servers.enc").exists(),"Existing VLESS profile/catalog must not be overwritten");
-            check(!profile.exists()&&!new File(profile+".bak").exists()&&!new File(profile+".new").exists(),"Refusing to overwrite an existing profile");ownsProfile=true;
+            check(!profile.exists()&&!new File(profile+".bak").exists()&&!new File(profile+".new").exists(),"Refusing to overwrite an existing profile");
+            if(cardsOnly){GameCardChecks.run(this,context);results.putString("game_world_cards","PASS");results.putInt("tests_passed",1);finish(Activity.RESULT_OK,results);return;}
+            if(interfaceOnly){
+                LayoutChecks.run(this,context);results.putString("adaptive_layout_and_release_history","PASS");
+                TroubleshootChecks.run(this,context);results.putString("connection_assistant","PASS");
+                AccessibilityChecks.run(this,context);results.putString("accessible_connection_signals","PASS");
+                GameCardChecks.run(this,context);results.putString("game_world_cards","PASS");
+                results.putInt("tests_passed",4);finish(Activity.RESULT_OK,results);return;
+            }
+            ownsProfile=true;
             JSONObject initial=new JSONObject(NativeBridge.status());check(initial.optString("phase").equals("idle"),"Native engine must initially be idle");
             results.putString("jni_load","PASS");
             String synthetic="{\"format\":\"openrad-identity-v1\",\"rid\":42,\"vip\":\"26.254.0.2\",\"node_name\":\"Тест Android\",\"address\":\"00000000000000000000000000000000\",\"credential\":\"736d6f6b652d736563726574\",\"server_address\":\"127.0.0.1\"}";
@@ -239,7 +249,10 @@ public final class RuntimeSmokeInstrumentation extends Instrumentation {
             runOnMainSync(()->{context.stopService(new android.content.Intent(context,QuickBubbleService.class));overlayHost.finish();});waitForIdleSync();Thread.sleep(300);check(QuickBubbleService.active()==null,"Overlay failed to stop");results.putString("floating_overlay_lifecycle","PASS");
 
             LayoutChecks.run(this,context);results.putString("adaptive_layout_and_release_history","PASS");
-            results.putInt("tests_passed",28);finish(Activity.RESULT_OK,results);
+            TroubleshootChecks.run(this,context);results.putString("connection_assistant", "PASS");
+            AccessibilityChecks.run(this,context);results.putString("accessible_connection_signals", "PASS");
+            GameCardChecks.run(this,context);results.putString("game_world_cards", "PASS");
+            results.putInt("tests_passed",31);finish(Activity.RESULT_OK,results);
         } catch(Throwable error) {
             NativeBridge.stop();results.putString("failure",error.getClass().getSimpleName()+": "+error.getMessage());java.io.StringWriter trace=new java.io.StringWriter();error.printStackTrace(new java.io.PrintWriter(trace));results.putString("failure_stack",trace.toString());finish(Activity.RESULT_CANCELED,results);
         } finally {

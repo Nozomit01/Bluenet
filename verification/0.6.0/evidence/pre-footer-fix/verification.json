@@ -1,0 +1,89 @@
+{
+  "version": "0.6.0",
+  "version_code": 9,
+  "date_utc": "2026-10-19",
+  "apk_sha256": "e803be2c9b9372b7c9879ac18895d08c4ded912cf497a312c50ad83e9070bfc6",
+  "apk_bytes": 44753227,
+  "build": "pass",
+  "lint_summary": "0 errors, 19 warnings",
+  "signature": "same certificate as0.5.3; APK v2",
+  "zipalign_16k": "pass",
+  "android": {
+    "status": "31 unique groups verified in two runs against the same signed production APK",
+    "api": 35,
+    "abi": "x86_64",
+    "groups": [
+      "accessible_connection_signals",
+      "adaptive_layout_and_release_history",
+      "android_xray_process_fd_and_mux",
+      "bounded_private_error_log",
+      "bounded_reconnect_policy",
+      "chat_activity_launch",
+      "chat_delivery_confirmation",
+      "chat_encrypted_history_bounds",
+      "chat_membership_boundary",
+      "chat_wire_validation",
+      "combined_route_isolation",
+      "connection_assistant",
+      "diagnostics_redaction",
+      "encrypted_catalog_selection_and_failover",
+      "english_dark_activity_launch",
+      "floating_overlay_lifecycle",
+      "game_port_virtual_path_and_tcp_correlation",
+      "game_world_cards",
+      "invitation_qr_roundtrip",
+      "jni_load",
+      "jni_worker_failure_lifecycle",
+      "keystore_roundtrip",
+      "language_theme_persistence",
+      "mux_early_cancel",
+      "per_app_dispatch_and_fail_closed_tun",
+      "probe_loss_and_rtt_history",
+      "profile_bounds_and_registration_guard",
+      "subscription_formats_and_bounds",
+      "tool_screens_launch",
+      "vless_import_validation",
+      "vpn_tun_ownership"
+    ],
+    "runs": [
+      {
+        "log": "evidence/android-runtime-initial.log",
+        "passed_groups": 30,
+        "failed_group": "game_world_cards",
+        "failure": "UI test clicked before asynchronous Dialog OnShow callback installed the Preview handler"
+      },
+      {
+        "log": "evidence/android-runtime-game-cards.log",
+        "passed_groups": 1,
+        "status": "PASS after test-only synchronization fix"
+      }
+    ],
+    "production_apk_unchanged": true,
+    "test_fix": "evidence/test-fix.diff"
+  },
+  "native_libraries": {
+    "baseline": "0.5.3",
+    "unchanged": [
+      "lib/arm64-v8a/libbluenet.so",
+      "lib/arm64-v8a/libbluenet_proxy.so",
+      "lib/armeabi-v7a/libbluenet.so",
+      "lib/armeabi-v7a/libbluenet_proxy.so",
+      "lib/x86_64/libbluenet.so",
+      "lib/x86_64/libbluenet_proxy.so"
+    ]
+  },
+  "dependencies_changed": false,
+  "source_review": "Three authors, independent reviewer and acceptance agent; two implementation RETURN findings corrected before testing",
+  "review_acceptance": "See evidence/agent-review.json for final acceptance",
+  "synthetic_layout_limitations": [
+    "TroubleshootActivity toolbar-only at manually constrained 240dp height with 2x text; test retains portrait window insets. This does not establish actual landscape/IME usability."
+  ],
+  "not_tested": [
+    "Real TalkBack speech and physical vibration",
+    "Physical ARM phones and OEM overlay/battery restrictions",
+    "Actual two-phone game-card chat over real Radmin networks",
+    "Real Happ/VLESS server and Windows interoperability in this release",
+    "Android8/9 runtime and long roaming/battery scenarios"
+  ],
+  "emulator_configuration": "Disposable software API35 emulator, two CPUs, system_server_watchdog_timeout_ms=600000; animations disabled, Bluetooth and Safety Center off; offline ADB verifier disabled, APK signature verification retained."
+}

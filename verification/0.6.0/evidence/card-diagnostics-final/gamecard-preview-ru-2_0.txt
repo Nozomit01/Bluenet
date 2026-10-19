@@ -1,0 +1,13 @@
+expectedLanguage=ru
+actualPreference=ru
+expectedAuthor=sdk_gphone64_x86_64
+authorLength=19
+previewBody:
+Только получателю: 26.4.5.6 · 26.4.5.6
+
+Игра: Minecraft
+Адрес: 26.1.2.3:25565
+Автор: sdk_gphone64_x86_64
+Время со слов автора: Oct 19, 2026 6:03:20 AM
+
+Указано хозяином; доступность не проверена. Карточки — только Android. Актуальность неизвестна без свежего подтверждения хозяина.

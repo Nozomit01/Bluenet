@@ -1,0 +1,12 @@
+{
+  "observed": "System UI is not responding dialog occluded application and owned input focus",
+  "window_focus": "Application Not Responding: com.android.systemui",
+  "effect": "Focused test sendPointerSync rejected target; stable input focus barrier timed out",
+  "actions": [
+    "hide_error_dialogs=1 on disposable emulator",
+    "CLOSE_SYSTEM_DIALOGS broadcast dismissed pre-existing system dialog",
+    "SystemUI restarted; subsequent keyguard/currentUser state remained inconsistent; disposable emulator rebooted before final test"
+  ],
+  "application_apk_changed": false,
+  "watchdog_ms": 600000
+}

@@ -1,0 +1,9 @@
+{
+  "production_apk_unchanged": true,
+  "changed_tests": [
+    "app/src/androidTest/java/ru/bluenet/vpn/GameCardUiChecks.java",
+    "app/src/androidTest/java/ru/bluenet/vpn/LayoutChecks.java",
+    "app/src/androidTest/java/ru/bluenet/vpn/RuntimeSmokeInstrumentation.java"
+  ],
+  "reason": "Same-task Activity resume and dialog input focus synchronization; focused interface selector invokes complete four check groups; all existing assertions retained"
+}

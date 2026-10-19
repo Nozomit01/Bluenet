@@ -1,0 +1,3 @@
+# Preserve generated release-note spacing and exact raw diff evidence.
+docs/github-releases/*.md whitespace=-blank-at-eof
+verification/**/evidence/**/*.diff -whitespace

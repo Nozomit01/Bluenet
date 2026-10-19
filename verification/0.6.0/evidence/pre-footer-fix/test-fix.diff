@@ -1,0 +1,52 @@
+--- initial/app/src/androidTest/java/ru/bluenet/vpn/GameCardUiChecks.java
++++ focused/app/src/androidTest/java/ru/bluenet/vpn/GameCardUiChecks.java
+@@ -26,8 +26,24 @@
+   SharedPreferences prefs=context.getSharedPreferences("settings",0);String oldLang=prefs.getString("language","ru"),oldTheme=prefs.getString("theme","system");
+   try{for(String language:new String[]{"ru","en"}){String theme=language.equals("ru")?"light":"dark";prefs.edit().putString("language",language).putString("theme",theme).commit();ChatActivity activity=(ChatActivity)instrumentation.startActivitySync(new Intent(context,ChatActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    try{instrumentation.waitForIdleSync();for(float scale:new float[]{1f,2f}){Fixture fixture=new Fixture();GameCardUi.Owner[] ref=new GameCardUi.Owner[1];GameCard card=GameCard.create("Minecraft","26.1.2.3",25565,"Fixture host",System.currentTimeMillis(),false);
+-    main(instrumentation,()->{android.view.ContextThemeWrapper themed=new android.view.ContextThemeWrapper(activity,theme.equals("dark")?android.R.style.Theme_Material_NoActionBar:android.R.style.Theme_Material_Light_NoActionBar);Configuration config=new Configuration(activity.getResources().getConfiguration());config.fontScale=scale;themed.applyOverrideConfiguration(config);ref[0]=new GameCardUi.Owner(themed,fixture);GameCardUi.compose(ref[0],fixture.peer,null,()->{});AlertDialog edit=ref[0].lastDialog();check(edit!=null&&edit.isShowing(),"compose not shown");List<EditText> fields=inputs(edit.getWindow().getDecorView());check(fields.size()==2,"manual game/port missing");fields.get(0).setText("Minecraft");fields.get(1).setText("25565");edit.getButton(-1).performClick();AlertDialog preview=ref[0].lastDialog();check(preview!=null&&preview.isShowing(),"preview not shown");String body=((TextView)preview.findViewById(android.R.id.message)).getText().toString();check(body.contains(fixture.peer)&&body.contains("26.1.2.3:25565")&&body.contains("Minecraft")&&body.contains("Android")&&body.contains(ref[0].context.getSharedPreferences("settings",0).getString("device",android.os.Build.MODEL).trim())&&body.contains(language.equals("ru")?"Время со слов автора":"Host-provided time"),"published fields/recipient missing");check(fixture.sends==0,"preview sent automatically");});
+-    instrumentation.waitForIdleSync();main(instrumentation,()->screenshot(context,ref[0].lastDialog(),"gamecard-preview-"+language+"-"+String.valueOf(scale).replace('.','_')+".png"));
++    AlertDialog[] composeDialog=new AlertDialog[1];
++    main(instrumentation,()->{android.view.ContextThemeWrapper themed=new android.view.ContextThemeWrapper(activity,theme.equals("dark")?android.R.style.Theme_Material_NoActionBar:android.R.style.Theme_Material_Light_NoActionBar);Configuration config=new Configuration(activity.getResources().getConfiguration());config.fontScale=scale;themed.applyOverrideConfiguration(config);ref[0]=new GameCardUi.Owner(themed,fixture);GameCardUi.compose(ref[0],fixture.peer,null,()->{});composeDialog[0]=ref[0].lastDialog();check(composeDialog[0]!=null&&composeDialog[0].isShowing(),"compose not shown");});
++    // Dialog dispatches OnShowListener asynchronously. Let it install the custom Preview click first.
++    instrumentation.waitForIdleSync();
++    main(instrumentation,()->{List<EditText> fields=inputs(composeDialog[0].getWindow().getDecorView());check(fields.size()==2,"manual game/port missing");fields.get(0).setText("Minecraft");fields.get(1).setText("25565");composeDialog[0].getButton(-1).performClick();});
++    instrumentation.waitForIdleSync();main(instrumentation,()->{
++     AlertDialog preview=ref[0].lastDialog();check(preview!=null&&preview!=composeDialog[0]&&preview.isShowing(),"Preview must be a new dialog after the compose OnShow callback");check(fixture.sends==0,"preview sent automatically");String artifact="gamecard-preview-"+language+"-"+String.valueOf(scale).replace('.','_');
++     screenshot(context,preview,artifact+".png");
++     String body=((TextView)preview.findViewById(android.R.id.message)).getText().toString();String author=ref[0].context.getSharedPreferences("settings",0).getString("device",android.os.Build.MODEL).trim();
++     String configuredLanguage=ref[0].context.getSharedPreferences("settings",0).getString("language","ru");
++     try(FileOutputStream out=new FileOutputStream(new File(context.getFilesDir(),artifact+".txt"))){out.write(("expectedLanguage="+language+"\nactualPreference="+configuredLanguage+"\nexpectedAuthor="+author+"\nauthorLength="+author.length()+"\npreviewBody:\n"+body).getBytes(java.nio.charset.StandardCharsets.UTF_8));}catch(IOException e){throw new RuntimeException(e);}
++     check(body.contains(fixture.peer),"preview missing selected recipient "+fixture.peer);
++     check(body.contains("26.1.2.3:25565"),"preview missing published own IP:port");
++     check(body.contains("Minecraft"),"preview missing game title");
++     check(body.contains("Android"),"preview missing Android-only limitation");
++     check(body.contains(author),"preview missing author; expectedLength="+author.length());
++     check(body.contains(language.equals("ru")?"Время со слов автора":"Host-provided time"),"preview timestamp label does not match requested language "+language+"; preference="+configuredLanguage);
++    });
+     click(instrumentation,ref[0],-2);check(fixture.sends==0,"cancel sent");
+     main(instrumentation,()->{GameCardUi.preview(ref[0],fixture.peer,card,()->{});fixture.ip="26.9.9.9";});click(instrumentation,ref[0],-1);check(fixture.sends==0,"changed IP sent");
+     main(instrumentation,()->{fixture.ip=card.ip;GameCardUi.preview(ref[0],fixture.peer,card,()->{});fixture.member=false;});click(instrumentation,ref[0],-1);check(fixture.sends==0,"stale recipient sent");
+--- initial/app/src/androidTest/java/ru/bluenet/vpn/RuntimeSmokeInstrumentation.java
++++ focused/app/src/androidTest/java/ru/bluenet/vpn/RuntimeSmokeInstrumentation.java
+@@ -15,7 +15,8 @@
+ 
+ /** Disposable-emulator checks. No Radmin server is contacted and no real profile is used. */
+ public final class RuntimeSmokeInstrumentation extends Instrumentation {
+-    @Override public void onCreate(Bundle arguments) { super.onCreate(arguments); start(); }
++    private boolean cardsOnly;
++    @Override public void onCreate(Bundle arguments) { super.onCreate(arguments); cardsOnly=arguments!=null&&"cards".equals(arguments.getString("only")); start(); }
+     private void check(boolean condition,String message) { if (!condition) throw new AssertionError(message); }
+     @Override public void onStart() {
+         Bundle results=new Bundle(); File profile=null; boolean ownsProfile=false;
+@@ -24,7 +25,9 @@
+             check(Build.HARDWARE.contains("ranchu")||Build.HARDWARE.contains("goldfish"),"Smoke tests require a disposable emulator");
+             Context context=getTargetContext();profile=new File(context.getFilesDir(),"identity.enc");
+             check(!new File(context.getFilesDir(),"vless.enc").exists()&&!new File(context.getFilesDir(),"servers.enc").exists(),"Existing VLESS profile/catalog must not be overwritten");
+-            check(!profile.exists()&&!new File(profile+".bak").exists()&&!new File(profile+".new").exists(),"Refusing to overwrite an existing profile");ownsProfile=true;
++            check(!profile.exists()&&!new File(profile+".bak").exists()&&!new File(profile+".new").exists(),"Refusing to overwrite an existing profile");
++            if(cardsOnly){GameCardChecks.run(this,context);results.putString("game_world_cards","PASS");results.putInt("tests_passed",1);finish(Activity.RESULT_OK,results);return;}
++            ownsProfile=true;
+             JSONObject initial=new JSONObject(NativeBridge.status());check(initial.optString("phase").equals("idle"),"Native engine must initially be idle");
+             results.putString("jni_load","PASS");
+             String synthetic="{\"format\":\"openrad-identity-v1\",\"rid\":42,\"vip\":\"26.254.0.2\",\"node_name\":\"Тест Android\",\"address\":\"00000000000000000000000000000000\",\"credential\":\"736d6f6b652d736563726574\",\"server_address\":\"127.0.0.1\"}";

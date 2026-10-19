@@ -1,0 +1,61 @@
+package ru.bluenet.vpn;
+import android.app.AlertDialog;
+import android.content.*;
+import android.text.InputType;
+import android.widget.*;
+import org.json.*;
+import java.util.*;
+/** Explicit, single-recipient game cards using the ordinary chat send path. */
+final class GameCardUi {
+ interface Boundary {
+  String ownIp();JSONObject member(String ip);void send(String peer,String text)throws Exception;
+  default boolean overlays(Context c){return android.provider.Settings.canDrawOverlays(c);}
+  default void show(AlertDialog d){d.show();}
+ }
+ static final class Owner {
+  final Context context;final Boundary boundary;private final ArrayList<AlertDialog> dialogs=new ArrayList<>();private boolean closed;
+  Owner(Context c){this(c,new Boundary(){public String ownIp(){return GameCardUi.ownIp();}public JSONObject member(String ip){return ChatEngine.member(ip);}public void send(String peer,String text)throws Exception{BlueVpnService.chat(peer,text);}});}
+  Owner(Context c,Boundary b){context=c;boundary=b;}
+  android.app.Activity activity(){Context c=context;for(int i=0;i<12;i++){if(c instanceof android.app.Activity)return (android.app.Activity)c;if(!(c instanceof ContextWrapper))break;Context next=((ContextWrapper)c).getBaseContext();if(next==c)break;c=next;}return null;}
+  boolean allowed(){if(closed)return false;try{android.app.Activity a=activity();return a!=null?!a.isFinishing()&&!a.isDestroyed():boundary.overlays(context);}catch(SecurityException denied){return false;}}
+  boolean closed(){return closed;}
+  int count(){return dialogs.size();}
+  AlertDialog lastDialog(){return dialogs.isEmpty()?null:dialogs.get(dialogs.size()-1);}
+  void close(){closed=true;for(AlertDialog d:new ArrayList<>(dialogs))try{d.dismiss();}catch(RuntimeException ignored){}dialogs.clear();}
+  void show(AlertDialog d){if(!allowed()){try{d.dismiss();}catch(RuntimeException ignored){}dialogs.remove(d);return;}try{if(activity()==null&&d.getWindow()!=null)d.getWindow().setType(android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);boundary.show(d);fitButtons(d);}catch(android.view.WindowManager.BadTokenException|SecurityException failure){try{d.dismiss();}catch(RuntimeException ignored){}dialogs.remove(d);}}
+  CardDialog builder(){return new CardDialog(this);}
+ }
+ // Platform ButtonBarLayout reserves only a peek of the second button when stacked.
+ // Reserve every full touch target so long, large-font content scrolls above the footer.
+ static void fitButtons(AlertDialog dialog){
+  Button first=dialog.getButton(AlertDialog.BUTTON_POSITIVE);if(first==null||first.getVisibility()!=android.view.View.VISIBLE)first=dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+  if(first==null||!(first.getParent() instanceof android.view.ViewGroup))return;
+  android.view.ViewGroup original=(android.view.ViewGroup)first.getParent();if(!(original.getParent() instanceof android.view.ViewGroup))return;
+  android.view.ViewGroup parent=(android.view.ViewGroup)original.getParent();LinearLayout footer=new LinearLayout(dialog.getContext());footer.setId(original.getId());footer.setOrientation(LinearLayout.VERTICAL);
+  int target=EasyUi.dp(dialog.getContext(),48),padding=EasyUi.dp(dialog.getContext(),8),height=0;footer.setPadding(padding,0,padding,0);
+  for(int which:new int[]{AlertDialog.BUTTON_POSITIVE,AlertDialog.BUTTON_NEGATIVE,AlertDialog.BUTTON_NEUTRAL}){Button button=dialog.getButton(which);if(button==null||button.getVisibility()!=android.view.View.VISIBLE)continue;original.removeView(button);button.setSingleLine(true);int buttonHeight=Math.max(target,(int)Math.ceil(button.getPaint().getFontMetrics().bottom-button.getPaint().getFontMetrics().top)+button.getCompoundPaddingTop()+button.getCompoundPaddingBottom());if(button.getBackground()!=null)buttonHeight=Math.max(buttonHeight,button.getBackground().getMinimumHeight());button.setMinHeight(buttonHeight);button.setMinimumHeight(buttonHeight);footer.addView(button,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,buttonHeight));height+=buttonHeight;}
+  if(height==0)return;footer.setMinimumHeight(height);int index=parent.indexOfChild(original);android.view.ViewGroup.LayoutParams params=original.getLayoutParams();parent.removeView(original);parent.addView(footer,index,params);
+ }
+ static final class CardDialog extends AlertDialog.Builder {
+  private final Owner owner;CardDialog(Owner o){super(o.context);owner=o;}
+  @Override public AlertDialog create(){AlertDialog d=super.create();if(owner.dialogs.size()>=4){AlertDialog oldest=owner.dialogs.remove(0);try{oldest.dismiss();}catch(RuntimeException ignored){}}owner.dialogs.add(d);d.setOnDismissListener(v->owner.dialogs.remove(d));return d;}
+  @Override public AlertDialog show(){AlertDialog d=create();owner.show(d);return d;}
+ }
+ static String t(Context c,String ru,String en){return EasyUi.t(c,ru,en);}
+ static String ownIp(){try{JSONObject state=new JSONObject(NativeBridge.status());if(!state.optString("phase").equals("connected"))return "";return GameCard.ip(state.getJSONObject("snapshot").getString("vip"));}catch(Exception e){return "";}}
+ static void compose(Owner owner,String recipient,GameCard old,Runnable changed){Context c=owner.context;if(!owner.allowed())return;
+  String ip=owner.boundary.ownIp();if(ip.isEmpty()||owner.boundary.member(recipient)==null){EasyUi.toast(c,"Подключитесь к сети и выберите получателя","Connect to a network and select a recipient");return;}
+  LinearLayout box=EasyUi.col(c);box.setPadding(EasyUi.dp(c,20),0,EasyUi.dp(c,20),0);
+  EditText game=field(c,t(c,"Название игры","Game name"),48),port=field(c,t(c,"Порт из экрана игры","Port shown in the game"),5);port.setInputType(InputType.TYPE_CLASS_NUMBER);if(old!=null){game.setText(old.game);port.setText(String.valueOf(old.port));}
+  box.addView(EasyUi.text(c,t(c,"Android → Android. Порт задаётся вручную. Сервер не проверяется.","Android → Android. Enter the port manually. Server availability is not checked."),13));box.addView(game);box.addView(port);ScrollView scroll=new ScrollView(c);scroll.addView(box);
+  AlertDialog dialog=owner.builder().setTitle(t(c,old==null?"Поделиться игровым миром":"Обновить новой карточкой",old==null?"Share game world":"Update with a new card")).setView(scroll).setNegativeButton(android.R.string.cancel,null).setPositiveButton(t(c,"Предпросмотр","Preview"),null).create();dialog.setOnShowListener(d->dialog.getButton(-1).setOnClickListener(v->{try{String current=owner.boundary.ownIp();if(current.isEmpty()||owner.boundary.member(recipient)==null)throw new IllegalStateException();String author=c.getSharedPreferences("settings",0).getString("device",android.os.Build.MODEL);author=author.trim();if(author.length()>48)author=author.substring(0,48);GameCard card=GameCard.create(game.getText().toString().trim(),current,Integer.parseInt(port.getText().toString()),author,System.currentTimeMillis(),old!=null);dialog.dismiss();preview(owner,recipient,card,changed);}catch(Exception e){port.setError(t(c,"Проверьте игру, порт 1–65535 и подключение","Check game, port 1–65535 and connection"));}}));owner.show(dialog);
+ }
+ static EditText field(Context c,String hint,int length){EditText e=new EditText(c);e.setHint(hint);e.setTextColor(EasyUi.ink(c));e.setSingleLine();e.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(length)});return e;}
+ static String details(Context c,GameCard card,String sender){return t(c,"Игра: ","Game: ")+card.game+"\n"+t(c,"Адрес: ","Address: ")+card.address()+"\n"+t(c,"Автор: ","Author: ")+sender+"\n"+t(c,"Время со слов автора: ","Host-provided time: ")+java.text.DateFormat.getDateTimeInstance().format(new Date(card.updated))+"\n\n"+t(c,"Указано хозяином; доступность не проверена. Карточки — только Android. Актуальность неизвестна без свежего подтверждения хозяина.","Host supplied; availability not checked. Cards are Android only. Freshness is unknown without a new confirmation from the host.")+(card.replacement?"\n"+t(c,"Новая карточка вместо предыдущей","New card replacing the previous one"):"");}
+ static void preview(Owner owner,String recipient,GameCard card,Runnable changed){Context c=owner.context;if(!owner.allowed())return;JSONObject member=owner.boundary.member(recipient);String name=member==null?recipient:member.optString("name",recipient);owner.builder().setTitle(t(c,"Отправить карточку?","Send card?")).setMessage(t(c,"Только получателю: ","Only to: ")+name+" · "+recipient+"\n\n"+details(c,card,card.author)).setNegativeButton(android.R.string.cancel,null).setPositiveButton(t(c,"Отправить","Send"),(d,w)->{try{if(!owner.allowed()||!card.ip.equals(owner.boundary.ownIp())||owner.boundary.member(recipient)==null)throw new IllegalStateException();owner.boundary.send(recipient,card.text());changed.run();EasyUi.toast(c,"Карточка отправлена в очередь чата","Card queued in chat");}catch(Exception e){EasyUi.toast(c,"Не отправлено: проверьте получателя и текущий адрес. Создайте новый предпросмотр.","Not sent: check the recipient and current address. Create a fresh preview.");}}).show();}
+ static String history(Context c,JSONObject row){String raw=row.optString("text");GameCard card=GameCard.parse(raw);if(card==null||(!row.optBoolean("out")&&!card.ip.equals(row.optString("peer"))))return raw;return t(c,"◇ Карточка игрового мира · ","◇ Game world card · ")+card.game+" · "+card.address()+"\n"+t(c,"Доступность не проверена. Откройте через «Быстрые фразы» → «Карточки игровых миров».","Availability not checked. Open via Quick phrases → Game world cards.");}
+ static void list(Owner owner,String recipient,Runnable changed){Context c=owner.context;if(!owner.allowed())return;JSONArray rows=ChatStore.get(c).rows();ArrayList<JSONObject> items=new ArrayList<>();ArrayList<String> labels=new ArrayList<>();for(int i=rows.length()-1;i>=0;i--){JSONObject row=rows.optJSONObject(i);GameCard card=row==null?null:GameCard.parse(row.optString("text"));if(card!=null&&(!row.optBoolean("out")?card.ip.equals(row.optString("peer")):true)){items.add(row);labels.add(card.game+" · "+card.address()+" · "+row.optString("name"));}}
+  if(items.isEmpty()){EasyUi.toast(c,"Карточек пока нет","No cards yet");return;}owner.builder().setTitle(t(c,"Карточки игровых миров","Game world cards")).setItems(labels.toArray(new String[0]),(d,w)->show(owner,items.get(w),recipient,changed)).setNegativeButton(android.R.string.cancel,null).show();}
+ static void show(Owner owner,JSONObject row,String recipient,Runnable changed){Context c=owner.context;if(!owner.allowed())return;GameCard card=GameCard.parse(row.optString("text"));if(card==null||(!row.optBoolean("out")&&!card.ip.equals(row.optString("peer"))))return;boolean out=row.optBoolean("out");String author=out?card.author:row.optString("name",row.optString("peer"));String mismatch=out&&!owner.boundary.ownIp().isEmpty()&&!owner.boundary.ownIp().equals(card.ip)?"\n\n"+t(c,"Ваш IP изменился. Отправьте новую карточку через обновление.","Your IP changed. Send a new card using Update."):"";
+  ArrayList<String> actions=new ArrayList<>();actions.add(t(c,"Копировать IP:порт","Copy IP:port"));if(out)actions.add(t(c,"Обновить новой карточкой…","Update with a new card…"));actions.add(t(c,"Удалить только на этом телефоне…","Delete only on this phone…"));owner.builder().setTitle(card.game).setMessage(details(c,card,author)+mismatch).setPositiveButton(t(c,"Действия","Actions"),(d,w)->owner.builder().setItems(actions.toArray(new String[0]),(a,index)->{if(index==0){((ClipboardManager)c.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Game address",card.address()));EasyUi.toast(c,"Адрес скопирован","Address copied");}else if(out&&index==1){compose(owner,recipient,card,changed);}else owner.builder().setMessage(t(c,"Удалить локальную карточку? Копия получателя останется.","Delete the local card? The recipient’s copy remains.")).setNegativeButton(android.R.string.cancel,null).setPositiveButton(android.R.string.ok,(x,y)->{try{ChatStore.get(c).delete(row.optString("peer"),row.optString("id"),out);changed.run();}catch(Exception e){EasyUi.toast(c,"Не удалось удалить","Could not delete");}}).show();}).show()).setNegativeButton(android.R.string.cancel,null).show();}
+}

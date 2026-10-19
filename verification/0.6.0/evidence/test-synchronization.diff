@@ -1,0 +1,104 @@
+--- before/app/src/androidTest/java/ru/bluenet/vpn/GameCardUiChecks.java
++++ after/app/src/androidTest/java/ru/bluenet/vpn/GameCardUiChecks.java
+@@ -25,7 +25,17 @@
+   for(int which:new int[]{-1,-2}){Button button=dialog.getButton(which);check(button!=null&&button.isShown()&&button.isEnabled(),"dialog button unavailable: "+which);Rect visible=new Rect();check(button.getGlobalVisibleRect(visible)&&visible.width()==button.getWidth()&&visible.height()==button.getHeight(),"dialog button clipped: "+which+" visible="+visible+" size="+button.getWidth()+"x"+button.getHeight());int[] location=new int[2];button.getLocationOnScreen(location);Rect bounds=new Rect(location[0],location[1],location[0]+button.getWidth(),location[1]+button.getHeight());check(frame.contains(bounds),"dialog button outside visible window: "+which+" bounds="+bounds+" frame="+frame);int target=EasyUi.dp(dialog.getContext(),48);check(button.getWidth()>=target&&button.getHeight()>=target,"dialog button tap target below 48dp: "+which);check(button.getLayout()!=null&&button.getLayout().getLineCount()==1&&button.getLayout().getLineWidth(0)<=button.getWidth()-button.getCompoundPaddingLeft()-button.getCompoundPaddingRight(),"dialog button label clipped: "+which);}
+  }
+  static void tapCancel(Instrumentation i,GameCardUi.Owner owner){
+-  AlertDialog[] dialog=new AlertDialog[1];float[] point=new float[2];main(i,()->{dialog[0]=owner.lastDialog();visibleButtons(dialog[0]);Button cancel=dialog[0].getButton(-2);int[] location=new int[2];cancel.getLocationOnScreen(location);point[0]=location[0]+cancel.getWidth()/2f;point[1]=location[1]+cancel.getHeight()/2f;});long time=android.os.SystemClock.uptimeMillis();android.view.MotionEvent down=android.view.MotionEvent.obtain(time,time,android.view.MotionEvent.ACTION_DOWN,point[0],point[1],0),up=android.view.MotionEvent.obtain(time,time+50,android.view.MotionEvent.ACTION_UP,point[0],point[1],0);try{i.sendPointerSync(down);i.sendPointerSync(up);}finally{down.recycle();up.recycle();}i.waitForIdleSync();main(i,()->check(!dialog[0].isShowing(),"visible Cancel tap did not dismiss dialog"));
++  AlertDialog[] dialog=new AlertDialog[1];main(i,()->dialog[0]=owner.lastDialog());
++  // Idle UI work does not imply that WindowManager has focused the new dialog yet.
++  long deadline=android.os.SystemClock.uptimeMillis()+5000,focusedSince=0;boolean[] ready=new boolean[1];
++  while(android.os.SystemClock.uptimeMillis()<deadline){
++   i.waitForIdleSync();main(i,()->{View decor=dialog[0].getWindow().getDecorView();ready[0]=owner.lastDialog()==dialog[0]&&dialog[0].isShowing()&&decor.isShown()&&decor.isAttachedToWindow()&&decor.hasWindowFocus();});
++   long now=android.os.SystemClock.uptimeMillis();if(ready[0]){if(focusedSince==0)focusedSince=now;if(now-focusedSince>=150)break;}else focusedSince=0;android.os.SystemClock.sleep(25);
++  }
++  check(ready[0]&&focusedSince!=0&&android.os.SystemClock.uptimeMillis()-focusedSince>=150,"Cancel dialog did not acquire stable input focus within 5s");
++  float[] point=new float[2];main(i,()->{check(dialog[0].getWindow().getDecorView().hasWindowFocus(),"Cancel dialog lost input focus before pointer snapshot");visibleButtons(dialog[0]);Button cancel=dialog[0].getButton(-2);int[] location=new int[2];cancel.getLocationOnScreen(location);point[0]=location[0]+cancel.getWidth()/2f;point[1]=location[1]+cancel.getHeight()/2f;});
++  main(i,()->check(dialog[0].isShowing()&&dialog[0].getWindow().getDecorView().isShown()&&dialog[0].getWindow().getDecorView().hasWindowFocus(),"Cancel dialog lost input focus before pointer tap"));
++  long time=android.os.SystemClock.uptimeMillis();android.view.MotionEvent down=android.view.MotionEvent.obtain(time,time,android.view.MotionEvent.ACTION_DOWN,point[0],point[1],0),up=android.view.MotionEvent.obtain(time,time+50,android.view.MotionEvent.ACTION_UP,point[0],point[1],0);down.setSource(android.view.InputDevice.SOURCE_TOUCHSCREEN);up.setSource(android.view.InputDevice.SOURCE_TOUCHSCREEN);try{i.sendPointerSync(down);i.sendPointerSync(up);}finally{down.recycle();up.recycle();}i.waitForIdleSync();main(i,()->check(!dialog[0].isShowing(),"visible Cancel tap did not dismiss dialog"));
+  }
+  static List<EditText> inputs(View v){ArrayList<EditText> result=new ArrayList<>();if(v instanceof EditText)result.add((EditText)v);if(v instanceof ViewGroup){ViewGroup g=(ViewGroup)v;for(int n=0;n<g.getChildCount();n++)result.addAll(inputs(g.getChildAt(n)));}return result;}
+  static void screenshot(Context c,AlertDialog d,String name){View v=d.getWindow().getDecorView();check(v.getWidth()>0&&v.getHeight()>0,"dialog not laid out");Bitmap b=Bitmap.createBitmap(v.getWidth(),v.getHeight(),Bitmap.Config.ARGB_8888);try{v.draw(new Canvas(b));try(FileOutputStream out=new FileOutputStream(new File(c.getFilesDir(),name))){b.compress(Bitmap.CompressFormat.PNG,100,out);}}catch(IOException e){throw new RuntimeException(e);}finally{b.recycle();}}
+--- before/app/src/androidTest/java/ru/bluenet/vpn/LayoutChecks.java
++++ after/app/src/androidTest/java/ru/bluenet/vpn/LayoutChecks.java
+@@ -8,6 +8,7 @@
+ import android.graphics.Canvas;
+ import android.graphics.Rect;
+ import android.os.Handler;
++import android.os.SystemClock;
+ import android.util.TypedValue;
+ import android.view.ContextThemeWrapper;
+ import android.view.View;
+@@ -31,6 +32,16 @@
+     private static void onMain(Instrumentation instrumentation,Runnable task){java.util.concurrent.atomic.AtomicReference<Throwable> failure=new java.util.concurrent.atomic.AtomicReference<>();instrumentation.runOnMainSync(()->{try{task.run();}catch(Throwable error){failure.set(error);}});if(failure.get()!=null)throw new AssertionError("Layout check failed",failure.get());}
+     private static int dp(Context c,int value){return Math.round(value*c.getResources().getDisplayMetrics().density);}
+     private static Object field(Object target,String name)throws Exception{Field f=target.getClass().getDeclaredField(name);f.setAccessible(true);return f.get(target);}
++    private static void awaitMainForeground(Instrumentation instrumentation,MainActivity activity,boolean expected){
++        long deadline=SystemClock.uptimeMillis()+5000;
++        boolean[] ready={false};
++        do{
++            onMain(instrumentation,()->{try{ready[0]=((Boolean)field(activity,"foreground"))==expected&&(!expected||activity.hasWindowFocus())&&!activity.isFinishing();}catch(Exception e){throw new RuntimeException(e);}});
++            if(ready[0])return;
++            SystemClock.sleep(25);
++        }while(SystemClock.uptimeMillis()<deadline);
++        throw new AssertionError("MainActivity did not "+(expected?"resume with window focus":"pause for the tool")+" within five seconds");
++    }
+     private static List<View> descendants(View root){List<View> all=new ArrayList<>();all.add(root);if(root instanceof ViewGroup){ViewGroup group=(ViewGroup)root;for(int i=0;i<group.getChildCount();i++)all.addAll(descendants(group.getChildAt(i)));}return all;}
+     private static void layout(View view,int width,int height){view.measure(View.MeasureSpec.makeMeasureSpec(width,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(height,View.MeasureSpec.EXACTLY));view.layout(0,0,width,height);}
+     private static Rect bounds(ViewGroup root,View child){Rect box=new Rect(0,0,child.getWidth(),child.getHeight());root.offsetDescendantRectToMyCoords(child,box);return box;}
+@@ -83,15 +94,26 @@
+                         for(String tag:new String[]{"settings-appearance","settings-game","settings-connection","settings-checks"})require(root.findViewWithTag(tag)!=null,"Missing settings section "+tag);
+                         ScrollView mainScroll=(ScrollView)field(activity,"mainScroll");mainScroll.scrollTo(0,dp(activity,180));savedScroll[0]=mainScroll.getScrollY();require(savedScroll[0]>0,"Settings fixture must be scrolled before return");
+                     }catch(Exception e){throw new RuntimeException(e);}});
+-                    FeatureActivity feature=(FeatureActivity)instrumentation.startActivitySync(new Intent(context,FeatureActivity.class).putExtra("mode","servers").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
++                    Instrumentation.ActivityMonitor toolMonitor=instrumentation.addMonitor(FeatureActivity.class.getName(),null,false);
++                    FeatureActivity feature;
++                    try{
++                        // Match openTools(): the tool must sit above this MainActivity in its task.
++                        onMain(instrumentation,()->activity.startActivity(new Intent(activity,FeatureActivity.class).putExtra("mode","servers")));
++                        android.app.Activity launched=instrumentation.waitForMonitorWithTimeout(toolMonitor,5000);
++                        require(launched instanceof FeatureActivity,"Tool did not launch within five seconds");
++                        feature=(FeatureActivity)launched;
++                    }finally{instrumentation.removeMonitor(toolMonitor);}
+                     try{
+                         instrumentation.waitForIdleSync();
++                        require(feature.getTaskId()==activity.getTaskId(),"Tool must return to the same MainActivity task");
++                        awaitMainForeground(instrumentation,activity,false);
+                         preferences.edit().putBoolean("stay_awake",!oldAwake).commit();
+                         onMain(instrumentation,()->{try{
+                             Field busy=FeatureActivity.class.getDeclaredField("busy");busy.setAccessible(true);busy.setBoolean(feature,true);
+                             View back=(View)field(feature,"backButton");require(back.isEnabled()&&back.performClick(),"Tool Back must remain usable while busy");require(feature.isFinishing(),"Busy tool Back did not close the screen");
+                         }catch(Exception e){throw new RuntimeException(e);}});
+-                        instrumentation.waitForIdleSync();
++                        // finish()/an idle queue do not guarantee that the underlying Activity resumed.
++                        awaitMainForeground(instrumentation,activity,true);
+                         onMain(instrumentation,()->{try{
+                             ViewGroup root=(ViewGroup)field(activity,"root");Switch awake=null;for(View view:descendants(root))if(view instanceof Switch){String value=((Switch)view).getText().toString();if(value.contains("Не гасить экран")||value.contains("Keep screen on"))awake=(Switch)view;}
+                             require(awake!=null&&awake.isChecked()!=oldAwake,"Settings did not refresh after returning from a tool");
+--- before/app/src/androidTest/java/ru/bluenet/vpn/RuntimeSmokeInstrumentation.java
++++ after/app/src/androidTest/java/ru/bluenet/vpn/RuntimeSmokeInstrumentation.java
+@@ -15,8 +15,8 @@
+ 
+ /** Disposable-emulator checks. No Radmin server is contacted and no real profile is used. */
+ public final class RuntimeSmokeInstrumentation extends Instrumentation {
+-    private boolean cardsOnly;
+-    @Override public void onCreate(Bundle arguments) { super.onCreate(arguments); cardsOnly=arguments!=null&&"cards".equals(arguments.getString("only")); start(); }
++    private boolean cardsOnly,interfaceOnly;
++    @Override public void onCreate(Bundle arguments) { super.onCreate(arguments); cardsOnly=arguments!=null&&"cards".equals(arguments.getString("only")); interfaceOnly=arguments!=null&&"interface".equals(arguments.getString("only")); start(); }
+     private void check(boolean condition,String message) { if (!condition) throw new AssertionError(message); }
+     @Override public void onStart() {
+         Bundle results=new Bundle(); File profile=null; boolean ownsProfile=false;
+@@ -27,6 +27,13 @@
+             check(!new File(context.getFilesDir(),"vless.enc").exists()&&!new File(context.getFilesDir(),"servers.enc").exists(),"Existing VLESS profile/catalog must not be overwritten");
+             check(!profile.exists()&&!new File(profile+".bak").exists()&&!new File(profile+".new").exists(),"Refusing to overwrite an existing profile");
+             if(cardsOnly){GameCardChecks.run(this,context);results.putString("game_world_cards","PASS");results.putInt("tests_passed",1);finish(Activity.RESULT_OK,results);return;}
++            if(interfaceOnly){
++                LayoutChecks.run(this,context);results.putString("adaptive_layout_and_release_history","PASS");
++                TroubleshootChecks.run(this,context);results.putString("connection_assistant","PASS");
++                AccessibilityChecks.run(this,context);results.putString("accessible_connection_signals","PASS");
++                GameCardChecks.run(this,context);results.putString("game_world_cards","PASS");
++                results.putInt("tests_passed",4);finish(Activity.RESULT_OK,results);return;
++            }
+             ownsProfile=true;
+             JSONObject initial=new JSONObject(NativeBridge.status());check(initial.optString("phase").equals("idle"),"Native engine must initially be idle");
+             results.putString("jni_load","PASS");

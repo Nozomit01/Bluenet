@@ -1,0 +1,13 @@
+expectedLanguage=en
+actualPreference=en
+expectedAuthor=sdk_gphone64_x86_64
+authorLength=19
+previewBody:
+Only to: 26.4.5.6 · 26.4.5.6
+
+Game: Minecraft
+Address: 26.1.2.3:25565
+Author: sdk_gphone64_x86_64
+Host-provided time: Oct 19, 2026 6:03:50 AM
+
+Host supplied; availability not checked. Cards are Android only. Freshness is unknown without a new confirmation from the host.

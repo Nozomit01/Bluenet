@@ -20,7 +20,7 @@ final class ChatEngine implements AutoCloseable {
  }
  static String clean(String text){if(text==null)return "";String s=text.trim();if(s.isEmpty()||s.length()>400||s.codePoints().anyMatch(c->Character.isISOControl(c)&&c!='\n'))throw new IllegalArgumentException("message_invalid");return s;}
  synchronized void send(String peer,String text)throws Exception{
-  String body=clean(text);if(body.isEmpty()||directory.member(peer)==null||closed||pending.size()>=8)throw new IllegalStateException("chat_unavailable");String id=UUID.randomUUID().toString();
+  String body=clean(text);if(!GameCard.allowed(body,vip))throw new IllegalArgumentException("card_sender");if(body.isEmpty()||directory.member(peer)==null||closed||pending.size()>=8)throw new IllegalStateException("chat_unavailable");String id=UUID.randomUUID().toString();
   synchronized(pending){if(pending.size()>=8)throw new IllegalStateException();pending.put(id,peer);}
   JSONObject packet=new JSONObject().put("v",1).put("id",id).put("text",body);byte[] wire;
   try{wire=ChatWire.packet(vip,peer,packet.toString());store.add(peer,directory.member(peer).optString("name",peer),id,body,true);}catch(Exception e){pending.remove(id);throw e;}
@@ -35,7 +35,7 @@ final class ChatEngine implements AutoCloseable {
   try{worker.execute(()->{try{
    if(closed||directory.member(data[0])==null)return;JSONObject json=new JSONObject(data[1]);String id=json.optString("id");if(json.optInt("v")!=1||!id.matches("[a-f0-9-]{36}"))return;
    if(json.optBoolean("ack")){if(pending.remove(id,data[0]))store.state(data[0],id,"delivered");return;}
-   String text=clean(json.optString("text"));if(text.isEmpty())return;
+   String text=clean(json.optString("text"));if(text.isEmpty()||!GameCard.allowed(text,data[0]))return;
    if(!store.has(data[0],id))store.add(data[0],member.optString("name",data[0]),id,text,false);
    sender.send(ChatWire.packet(vip,data[0],new JSONObject().put("v",1).put("id",id).put("ack",true).toString()));
   }catch(Exception ignored){}});}catch(RejectedExecutionException ignored){}return true;

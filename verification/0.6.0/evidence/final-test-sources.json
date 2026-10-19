@@ -1,0 +1,9 @@
+{
+  "app/src/androidTest/java/ru/bluenet/vpn/AccessibilityChecks.java": "2d2e45a005b6eaada02412e50006bef21665dc16eca5b792e5b6fd2fbc450390",
+  "app/src/androidTest/java/ru/bluenet/vpn/FlowOwnerFixtureService.java": "66184a7bf3d9eced9ffafa7edeb2efed23758b9e765e4edd85c04e579df28bfa",
+  "app/src/androidTest/java/ru/bluenet/vpn/GameCardChecks.java": "947fd965b86af4ebf556264d03141a5cade5fe16581490f20988f9774cd12671",
+  "app/src/androidTest/java/ru/bluenet/vpn/GameCardUiChecks.java": "985be9c40b50e15ae96a6c5c83a7c347a2fddd87823d9ec1d38ecb64b8f7a33f",
+  "app/src/androidTest/java/ru/bluenet/vpn/LayoutChecks.java": "b979e523c80c697773e77429985f1a7954c27c5afdad0165e479d8b7927913ef",
+  "app/src/androidTest/java/ru/bluenet/vpn/RuntimeSmokeInstrumentation.java": "e953d50038661bbf3a392238837ff8fa90e67724da0941c242826d2ce54b5228",
+  "app/src/androidTest/java/ru/bluenet/vpn/TroubleshootChecks.java": "0eafffca143b8cbe46ad1b54da40ebd39d38c6238c8175f2e5afa71c7c3fa53c"
+}
